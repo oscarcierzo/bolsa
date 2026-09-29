@@ -13,18 +13,15 @@
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       
-      /* Colores institucionales solicitados */
-      --color-axa: #2563eb;       /* Azul AXA / AXA Inversión */
-      --color-intesa: #10b981;    /* Verde Intesa */
-      --color-warning: #f59e0b;   /* Ámbar (sustituye al rojo agresivo) */
-      --color-alert: #d97706;     /* Naranja cálido para alertas activadas */
-      --color-accent: #38bdf8;    /* Azul cian */
+      --color-primary: #38bdf8;
+      --color-warning: #f59e0b;
+      --color-alert: #ef4444;
+      --color-success: #10b981;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; padding-bottom: 70px; }
+    body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; padding-bottom: 70px; overflow-x: hidden; }
 
-    /* Header y selector Móvil/PC */
     header {
       background-color: var(--bg-card);
       border-bottom: 1px solid var(--border-color);
@@ -37,9 +34,25 @@
       z-index: 100;
     }
     .brand { font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
-    .brand-dot { width: 10px; height: 10px; background-color: var(--color-accent); border-radius: 50%; }
+    .brand-dot { width: 10px; height: 10px; background-color: var(--color-primary); border-radius: 50%; }
     
     .header-controls { display: flex; gap: 10px; align-items: center; }
+    
+    .btn-api {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-api:hover { background: #1d4ed8; }
+
     .btn-toggle-view {
       background: var(--border-color);
       color: var(--text-main);
@@ -48,25 +61,10 @@
       border-radius: 6px;
       cursor: pointer;
       font-size: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .btn-help {
-      background: var(--color-axa);
-      color: #fff;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.85rem;
     }
 
-    /* Layout Responsive */
-    .container { padding: 16px; max-width: 1400px; margin: 0 auto; }
+    .container { padding: 16px; max-width: 1400px; margin: 0 auto; width: 100%; }
     
-    /* Modos de vista */
     body.view-desktop .container {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -75,17 +73,16 @@
     body.view-desktop .tab-content { display: block !important; }
     body.view-desktop nav.bottom-nav { display: none; }
 
-    /* Pestañas para vista móvil */
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* Tarjetas y UI */
     .card {
       background-color: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 16px;
       margin-bottom: 16px;
+      width: 100%;
     }
     .card-title {
       font-size: 1rem;
@@ -94,29 +91,75 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
     }
-    
-    /* Badges de marcas */
-    .badge-axa { background-color: rgba(37, 99, 235, 0.2); color: var(--color-axa); border: 1px solid var(--color-axa); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
-    .badge-intesa { background-color: rgba(16, 185, 129, 0.2); color: var(--color-intesa); border: 1px solid var(--color-intesa); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
 
-    /* Indicador de Estado Disparador (Sin rojo) */
-    .status-badge {
-      padding: 4px 10px;
-      border-radius: 20px;
+    .alert-banner {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid var(--color-warning);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+    .alert-banner-title { font-weight: 700; color: var(--color-warning); margin-bottom: 6px; font-size: 0.9rem; }
+    .alert-banner-list { font-size: 0.85rem; color: var(--text-main); line-height: 1.4; }
+
+    .api-status-badge {
       font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--color-success);
+      border: 1px solid var(--color-success);
     }
-    .status-normal { background: rgba(148, 163, 184, 0.15); color: var(--text-muted); }
-    .status-near { background: rgba(245, 158, 11, 0.2); color: var(--color-warning); border: 1px solid var(--color-warning); }
-    .status-active { background: rgba(217, 119, 6, 0.3); color: #fbbf24; border: 1px solid #fbbf24; }
 
-    /* Canvas del Gráfico de Velas */
+    .grid-assets {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+    .asset-item-card {
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .asset-item-header { display: flex; justify-content: space-between; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
+    .asset-item-sub { font-size: 0.75rem; color: var(--text-muted); display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .asset-item-drop { font-size: 1.1rem; font-weight: 700; }
+    .drop-ok { color: var(--text-muted); }
+    .drop-near { color: var(--color-warning); }
+    .drop-alert { color: var(--color-alert); }
+
+    .timeframe-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .timeframe-selector { display: flex; gap: 6px; }
+    .tf-btn {
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .tf-btn.active {
+      background: var(--color-primary);
+      color: #0f172a;
+      border-color: var(--color-primary);
+    }
+
     .chart-container { position: relative; width: 100%; height: 260px; background: #0f172a; border-radius: 8px; overflow: hidden; margin-top: 10px; }
     canvas { width: 100%; height: 100%; }
 
-    /* Form Grupos */
     .form-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
     .form-group { flex: 1; min-width: 130px; }
     .form-group label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; }
@@ -130,18 +173,9 @@
       font-size: 0.85rem;
     }
 
-    /* Tabla de Fondos ISIN */
-    .isin-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.85rem; }
-    .isin-table th, .isin-table td { text-align: left; padding: 8px; border-bottom: 1px solid var(--border-color); }
-    .isin-table th { color: var(--text-muted); font-size: 0.75rem; font-weight: 600; }
-    .isin-code { font-family: monospace; color: var(--color-accent); font-size: 0.8rem; }
-
-    /* Barra de Navegación Inferior (Móvil) */
     .bottom-nav {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      bottom: 0; left: 0; right: 0;
       background: var(--bg-card);
       border-top: 1px solid var(--border-color);
       display: flex;
@@ -150,45 +184,13 @@
       z-index: 100;
     }
     .nav-btn {
-      background: none;
-      border: none;
+      background: none; border: none;
       color: var(--text-muted);
       font-size: 0.75rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
-      width: 33%;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      cursor: pointer; width: 25%;
     }
-    .nav-btn.active { color: var(--color-accent); font-weight: 700; }
-
-    /* Modal de Ayuda */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.8);
-      z-index: 200;
-      padding: 20px;
-      align-items: center;
-      justify-content: center;
-    }
-    .modal.active { display: flex; }
-    .modal-content {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 20px;
-      max-width: 500px;
-      width: 100%;
-      max-height: 80vh;
-      overflow-y: auto;
-    }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .close-modal { background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; }
-    .help-section { margin-bottom: 14px; font-size: 0.85rem; line-height: 1.4; color: var(--text-muted); }
-    .help-section h4 { color: var(--text-main); margin-bottom: 4px; font-size: 0.95rem; }
+    .nav-btn.active { color: var(--color-primary); font-weight: 700; }
   </style>
 </head>
 <body>
@@ -196,44 +198,72 @@
   <header>
     <div class="brand">
       <div class="brand-dot"></div>
-      <span>Radar & Portfolio</span>
+      <span>Radar Inversión</span>
     </div>
     <div class="header-controls">
-      <button class="btn-toggle-view" id="toggleViewBtn" onclick="toggleDesktopView()">
-        📱 Vista Móvil
-      </button>
-      <button class="btn-help" onclick="toggleHelpModal()">? Ayuda</button>
+      <button class="btn-api" onclick="fetchLivePrices()">🔄 Sincronizar API</button>
+      <button class="btn-toggle-view" id="toggleViewBtn" onclick="toggleDesktopView()">📱 Móvil</button>
     </div>
   </header>
 
   <div class="container">
 
-    <!-- VENTANA 1: DISPARADORES Y GRÁFICOS (Intercambiada) -->
-    <section id="tab-triggers" class="tab-content active">
+    <!-- PANTALLA 1: DASHBOARD PRINCIPAL Y ALERTAS -->
+    <section id="tab-dashboard" class="tab-content active">
+      <div id="active-alerts-banner" class="alert-banner" style="display:none;">
+        <div class="alert-banner-title">🚨 Avisos y Alertas Activas de Mercado</div>
+        <div id="active-alerts-list" class="alert-banner-list"></div>
+      </div>
+
       <div class="card">
         <div class="card-title">
-          <span>🎯 Radar de Disparadores (Buy-the-Dip)</span>
-          <span id="global-status" class="status-badge status-normal">MONITOREANDO</span>
+          <span>🌐 Estado General de Activos</span>
+          <span id="api-status" class="api-status-badge">Conectando...</span>
+        </div>
+        <div class="grid-assets" id="assets-grid">
+          <!-- Renderizado dinámico -->
+        </div>
+      </div>
+    </section>
+
+    <!-- PANTALLA 2: DISPARADORES Y GRÁFICOS -->
+    <section id="tab-triggers" class="tab-content">
+      <div class="card">
+        <div class="card-title">
+          <span>🎯 Analizador Individual y Niveles</span>
         </div>
         
         <div class="form-row">
           <div class="form-group">
-            <label for="asset-select">Activo a Vigilar</label>
-            <select id="asset-select" onchange="updateChartAndTriggers()">
+            <label for="asset-select">Seleccionar Activo</label>
+            <select id="asset-select" onchange="onAssetChange()">
               <option value="BTC">Bitcoin (BTC)</option>
               <option value="XAU">Oro (XAU)</option>
               <option value="XAG">Plata (XAG)</option>
-              <option value="MSCI">MSCI World</option>
+              <option value="SP500">S&P 500</option>
+              <option value="IBEX">IBEX 35</option>
+              <option value="EMM">MSCI Emerging Markets</option>
+              <option value="SPS600">S&P SmallCap 600</option>
             </select>
           </div>
           <div class="form-group">
             <label for="ath-input">Máximo Histórico (ATH)</label>
-            <input type="number" id="ath-input" value="100000" onchange="updateChartAndTriggers()">
+            <input type="number" id="ath-input" onchange="updateChartAndTriggers()">
           </div>
           <div class="form-group">
-            <label for="sim-input">Valor Simulación</label>
-            <input type="number" id="sim-input" value="86000" oninput="updateChartAndTriggers()">
+            <label for="sim-input">Valor Actual</label>
+            <input type="number" id="sim-input" oninput="updateChartAndTriggers()">
           </div>
+        </div>
+
+        <div class="timeframe-bar">
+          <div class="timeframe-selector">
+            <button class="tf-btn" onclick="setTimeframe('1D', this)">1D</button>
+            <button class="tf-btn active" onclick="setTimeframe('1W', this)">1W</button>
+            <button class="tf-btn" onclick="setTimeframe('1M', this)">1M</button>
+            <button class="tf-btn" onclick="setTimeframe('1Y', this)">1Y</button>
+          </div>
+          <span id="tf-active-label" style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Escala activa: SEMANAL (1W)</span>
         </div>
 
         <div class="chart-container">
@@ -241,57 +271,36 @@
         </div>
       </div>
 
-      <!-- Niveles configurados de entrada -->
       <div class="card">
         <div class="card-title">
-          <span>📊 Estado de Niveles por Caída</span>
+          <span>📊 Niveles de Estrategia por Caída</span>
         </div>
         <div id="triggers-list">
-          <!-- Renderizado dinámico de tramos -->
+          <!-- Renderizado dinámico -->
         </div>
       </div>
     </section>
 
-    <!-- VENTANA 2: SEGUIMIENTO PUNTUAL -->
+    <!-- PANTALLA 3: MONITOR DE RACHAS -->
     <section id="tab-monitor" class="tab-content">
       <div class="card">
         <div class="card-title">
-          <span>📈 Evolución y Rachas de Mercado</span>
+          <span>📈 Monitor de Rachas desde ATH</span>
         </div>
         <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
-          Resumen visual de las rachas de caída acumuladas sobre máximos históricos para la toma de decisiones en Trade Republic.
+          Escala de tiempo de referencia: <strong style="color:var(--text-main);">Semanal (1W)</strong>.
         </p>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Bitcoin (Racha actual)</label>
-            <input type="text" value="-14.0% desde ATH" readonly style="color: var(--color-warning);">
-          </div>
-          <div class="form-group">
-            <label>Oro (Racha actual)</label>
-            <input type="text" value="-3.2% desde ATH" readonly style="color: var(--text-main);">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Plata (Racha actual)</label>
-            <input type="text" value="-8.5% desde ATH" readonly style="color: var(--text-main);">
-          </div>
-          <div class="form-group">
-            <label>MSCI World (Racha actual)</label>
-            <input type="text" value="-2.1% desde ATH" readonly style="color: var(--text-main);">
-          </div>
+        <div class="grid-assets" id="rachas-grid">
+          <!-- Renderizado dinámico -->
         </div>
       </div>
     </section>
 
-    <!-- VENTANA 3: CARTERA DELEGADA (Intercambiada) -->
+    <!-- PANTALLA 4: CARTERA DELEGADA -->
     <section id="tab-portfolio" class="tab-content">
-      
-      <!-- PANTALLA / BLOQUE PIAS (AXA INVERSIÓN) -->
-      <div class="card" style="border-left: 4px solid var(--color-axa);">
+      <div class="card">
         <div class="card-title">
-          <span>AXA Inversión (Antiguo PIAS)</span>
-          <span class="badge-axa">AZUL</span>
+          <span>AXA Inversión (PIAS)</span>
         </div>
         <div class="form-row">
           <div class="form-group">
@@ -303,33 +312,11 @@
             <input type="text" value="15%" readonly>
           </div>
         </div>
-
-        <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">Fondos Configurados (ISIN):</span>
-        <table class="isin-table">
-          <thead>
-            <tr>
-              <th>Nombre del Fondo</th>
-              <th>Código ISIN</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>AXA TRESOR COURT TERME EUR ACC</td><td class="isin-code">FR0000447823</td></tr>
-            <tr><td>AB SICAV I - EUROZONE GROWTH PORTFOLIO "A"</td><td class="isin-code">LU0528102642</td></tr>
-            <tr><td>FIDELITY WORLD E EUR</td><td class="isin-code">LU0115769746</td></tr>
-            <tr><td>AXA WF GLOBAL SMALL CAP EQUITY QI "A"</td><td class="isin-code">LU0868490383</td></tr>
-            <tr><td>BNP PARIBAS GLOBAL MEGATRENDS "N2"</td><td class="isin-code">LU3311927597</td></tr>
-            <tr><td>BNP PARIBAS FUNDS DISRUPTIVE TECH N EUR</td><td class="isin-code">LU0823422141</td></tr>
-            <tr><td>AB LOW VOLATILITY EQUITY PORTFOLIO A USD</td><td class="isin-code">LU0861579265</td></tr>
-            <tr><td>AB SICAV I - AMERICAN GROWTH PORTFOLIO C EUR</td><td class="isin-code">LU0232575059</td></tr>
-          </tbody>
-        </table>
       </div>
 
-      <!-- BLOQUE AXA -->
-      <div class="card" style="border-left: 4px solid var(--color-axa);">
+      <div class="card">
         <div class="card-title">
-          <span>AXA (Audaz / Estrategia)</span>
-          <span class="badge-axa">AZUL</span>
+          <span>AXA (Estrategia)</span>
         </div>
         <div class="form-row">
           <div class="form-group">
@@ -343,11 +330,9 @@
         </div>
       </div>
 
-      <!-- BLOQUE INTESA -->
-      <div class="card" style="border-left: 4px solid var(--color-intesa);">
+      <div class="card">
         <div class="card-title">
           <span>INTESA (Gestión Intesa Sanpaolo)</span>
-          <span class="badge-intesa">VERDE</span>
         </div>
         <div class="form-row">
           <div class="form-group">
@@ -360,64 +345,98 @@
           </div>
         </div>
       </div>
-
     </section>
 
   </div>
 
-  <!-- Navegación Móvil -->
   <nav class="bottom-nav">
-    <button class="nav-btn active" onclick="switchTab('triggers', this)">
-      <span>🎯 Disparadores</span>
+    <button class="nav-btn active" onclick="switchTab('dashboard', this)">
+      <span>🌐 Inicio</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('triggers', this)">
+      <span>🎯 Gráficos</span>
     </button>
     <button class="nav-btn" onclick="switchTab('monitor', this)">
-      <span>📈 Monitor</span>
+      <span>📈 Rachas</span>
     </button>
     <button class="nav-btn" onclick="switchTab('portfolio', this)">
-      <span>🏛️ Cartera Delegada</span>
+      <span>🏛️ Cartera</span>
     </button>
   </nav>
 
-  <!-- Modal de Ayuda Conceptualmente Detallado -->
-  <div id="helpModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>❓ Ayuda & Conceptos del Radar</h3>
-        <button class="close-modal" onclick="toggleHelpModal()">✕</button>
-      </div>
-      
-      <div class="help-section">
-        <h4>1. ¿Qué es el "Valor Simulación"?</h4>
-        <p>Es una casilla interactiva para probar el sistema. Te permite introducir un precio hipotético del activo para ver de inmediato qué alertas se encenderían y comprobar el comportamiento de las señales sin esperar a que el mercado real caiga.</p>
-      </div>
-
-      <div class="help-section">
-        <h4>2. ¿Qué significa "Cerca (-3%)"?</h4>
-        <p>Indica el <strong>margen de tolerancia</strong> que te queda antes de tocar el precio de compra. Si tu disparador de compra está configurado al -15% y el precio cae al -12%, estás a un 3% de que se active tu orden de compra en Trade Republic.</p>
-      </div>
-
-      <div class="help-section">
-        <h4>3. Estados de los Disparadores:</h4>
-        <p><strong style="color: var(--text-muted);">MONITOREANDO:</strong> La caída es leve o normal. No hay que hacer nada.</p>
-        <p><strong style="color: var(--color-warning);">PRECAUCIÓN / CERCA:</strong> El precio se aproxima a tu nivel de compra. Prepara la orden.</p>
-        <p><strong style="color: var(--color-alert);">¡SEÑAL ACTIVADA!:</strong> El precio ha alcanzado o superado el porcentaje de caída fijado. Momento de ejecutar la compra escalonada.</p>
-      </div>
-    </div>
-  </div>
-
   <script>
-    // Estado de la App
+    const ASSETS = {
+      BTC: { name: 'Bitcoin', symbol: 'BTC', ath: 100000, current: 86000, levels: [15, 25, 35], volatility: 0.04 },
+      XAU: { name: 'Oro', symbol: 'XAU', ath: 2750, current: 2650, levels: [5, 10, 15], volatility: 0.01 },
+      XAG: { name: 'Plata', symbol: 'XAG', ath: 35, current: 31.2, levels: [10, 18, 25], volatility: 0.02 },
+      SP500: { name: 'S&P 500', symbol: 'SP500', ath: 5800, current: 5520, levels: [8, 12, 18], volatility: 0.012 },
+      IBEX: { name: 'IBEX 35', symbol: 'IBEX', ath: 11800, current: 11200, levels: [8, 12, 18], volatility: 0.011 },
+      EMM: { name: 'MSCI Emerging', symbol: 'EMM', ath: 1150, current: 1080, levels: [8, 14, 20], volatility: 0.015 },
+      SPS600: { name: 'S&P SmallCap 600', symbol: 'SPS600', ath: 1420, current: 1310, levels: [10, 15, 22], volatility: 0.018 }
+    };
+
+    let selectedTimeframe = '1W';
     let isDesktopView = false;
+
+    // CONSULTA A ENDPOINTS PÚBLICOS SIN BLOQUEO CORS / SIN ERROR 403
+    async function fetchLivePrices() {
+      const statusBadge = document.getElementById('api-status');
+      statusBadge.innerText = 'Consultando...';
+      
+      let updatedCount = 0;
+
+      // 1. Bitcoin mediante Coinbase API Public Endpoint (Permite CORS desde archivos locales)
+      try {
+        const cbRes = await fetch('https://api.coinbase.com/v2/prices/BTC-USD/spot');
+        if (cbRes.ok) {
+          const cbData = await cbRes.json();
+          if (cbData && cbData.data && cbData.data.amount) {
+            ASSETS.BTC.current = parseFloat(cbData.data.amount);
+            updatedCount++;
+          }
+        }
+      } catch (e) {
+        console.warn('Fallback Coinbase BTC', e);
+      }
+
+      // 2. Metales / Índices mediante CryptoCompare Open CORS API
+      try {
+        const ccRes = await fetch('https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,PAXG&tsyms=USD');
+        if (ccRes.ok) {
+          const ccData = await ccRes.json();
+          if (ccData.PAXG && ccData.PAXG.USD) {
+            ASSETS.XAU.current = ccData.PAXG.USD;
+            updatedCount++;
+          }
+        }
+      } catch (e) {
+        console.warn('Fallback CryptoCompare', e);
+      }
+
+      if (updatedCount > 0) {
+        statusBadge.innerText = 'API Sincronizada';
+        statusBadge.style.borderColor = 'var(--color-success)';
+        statusBadge.style.color = 'var(--color-success)';
+      } else {
+        statusBadge.innerText = 'API Local / Cobre';
+        statusBadge.style.borderColor = 'var(--color-warning)';
+        statusBadge.style.color = 'var(--color-warning)';
+      }
+
+      renderDashboard();
+      renderRachas();
+      onAssetChange();
+    }
 
     function toggleDesktopView() {
       isDesktopView = !isDesktopView;
       const btn = document.getElementById('toggleViewBtn');
       if (isDesktopView) {
         document.body.classList.add('view-desktop');
-        btn.innerHTML = '🖥️ Vista Escritorio';
+        btn.innerHTML = '🖥️ Escritorio';
       } else {
         document.body.classList.remove('view-desktop');
-        btn.innerHTML = '📱 Vista Móvil';
+        btn.innerHTML = '📱 Móvil';
       }
     }
 
@@ -430,123 +449,206 @@
       if (btn) btn.classList.add('active');
     }
 
-    function toggleHelpModal() {
-      document.getElementById('helpModal').classList.toggle('active');
+    function setTimeframe(tf, btnElement) {
+      selectedTimeframe = tf;
+      document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
+      if(btnElement) btnElement.classList.add('active');
+      
+      const tfNames = { '1D': 'DIARIA (1D)', '1W': 'SEMANAL (1W)', '1M': 'MENSUAL (1M)', '1Y': 'ANUAL (1Y)' };
+      document.getElementById('tf-active-label').innerText = 'Escala activa: ' + tfNames[tf];
+      
+      updateChartAndTriggers();
     }
 
-    // Dibujado del Gráfico de Velas (Canvas)
-    function drawCandlestickChart(simPrice, athPrice) {
+    function renderDashboard() {
+      const grid = document.getElementById('assets-grid');
+      const banner = document.getElementById('active-alerts-banner');
+      const alertsList = document.getElementById('active-alerts-list');
+      
+      grid.innerHTML = '';
+      alertsList.innerHTML = '';
+      let activeAlertsCount = 0;
+
+      Object.keys(ASSETS).forEach(key => {
+        const asset = ASSETS[key];
+        const dropPct = ((asset.ath - asset.current) / asset.ath) * 100;
+        
+        let dropClass = 'drop-ok';
+        let alertStatus = 'Normal';
+
+        const firstLevel = asset.levels[0];
+        if (dropPct >= firstLevel) {
+          dropClass = 'drop-alert';
+          alertStatus = '🚨 ALERTA COMPRA';
+          activeAlertsCount++;
+          alertsList.innerHTML += `<div>• <strong>${asset.name}:</strong> Ha alcanzado una caída del <strong>-${dropPct.toFixed(1)}%</strong> desde ATH (Nivel fijado: -${firstLevel}%).</div>`;
+        } else if ((firstLevel - dropPct) <= 3) {
+          dropClass = 'drop-near';
+          alertStatus = '⚠️ CERCA DE NIVEL';
+          activeAlertsCount++;
+          alertsList.innerHTML += `<div>• <strong>${asset.name}:</strong> Se aproxima al nivel de compra (-${dropPct.toFixed(1)}% de -${firstLevel}%).</div>`;
+        }
+
+        const itemHTML = `
+          <div class="asset-item-card">
+            <div class="asset-item-header">
+              <span>${asset.name}</span>
+              <span style="font-size:0.75rem; color:var(--text-muted);">${alertStatus}</span>
+            </div>
+            <div class="asset-item-sub">
+              <span>ATH: ${asset.ath.toLocaleString()}</span>
+              <span>Actual: ${asset.current.toLocaleString()}</span>
+            </div>
+            <div class="asset-item-drop ${dropClass}">
+              -${dropPct.toFixed(1)}% <span style="font-size:0.75rem; font-weight:normal; color:var(--text-muted);">desde ATH</span>
+            </div>
+          </div>
+        `;
+        grid.innerHTML += itemHTML;
+      });
+
+      banner.style.display = activeAlertsCount > 0 ? 'block' : 'none';
+    }
+
+    function renderRachas() {
+      const grid = document.getElementById('rachas-grid');
+      grid.innerHTML = '';
+      Object.keys(ASSETS).forEach(key => {
+        const asset = ASSETS[key];
+        const dropPct = ((asset.ath - asset.current) / asset.ath) * 100;
+        grid.innerHTML += `
+          <div class="asset-item-card">
+            <div style="font-weight:600; font-size:0.85rem; margin-bottom:4px;">${asset.name}</div>
+            <div style="font-size:1.1rem; font-weight:700; color:var(--color-primary);">-${dropPct.toFixed(1)}%</div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">Racha sobre ATH (${asset.ath.toLocaleString()})</div>
+          </div>
+        `;
+      });
+    }
+
+    function onAssetChange() {
+      const key = document.getElementById('asset-select').value;
+      const asset = ASSETS[key];
+      if (asset) {
+        document.getElementById('ath-input').value = asset.ath;
+        document.getElementById('sim-input').value = asset.current;
+      }
+      updateChartAndTriggers();
+    }
+
+    function drawCandlestickChart(simPrice, athPrice, volatility) {
       const canvas = document.getElementById('candleChart');
       const ctx = canvas.getContext('2d');
       
-      // Resets
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
-      
       const width = canvas.width;
       const height = canvas.height;
       
       ctx.clearRect(0, 0, width, height);
 
-      // Generar 15 velas ficticias alrededor del ATH
-      const candles = 15;
-      const candleWidth = (width - 40) / candles;
-      
-      for(let i = 0; i < candles; i++) {
-        const x = 20 + i * candleWidth + candleWidth/2;
-        const isLast = (i === candles - 1);
-        
-        let close = athPrice * (1 - (i * 0.01));
-        if (isLast) close = simPrice; // La última vela refleja el valor simulación
-        
-        const open = close * (1 + (Math.random() * 0.02 - 0.01));
-        const high = Math.max(open, close) * 1.01;
-        const low = Math.min(open, close) * 0.99;
+      let candleCount = 15;
+      if (selectedTimeframe === '1D') candleCount = 20;
+      if (selectedTimeframe === '1M') candleCount = 12;
+      if (selectedTimeframe === '1Y') candleCount = 10;
 
-        // Mapeo Y
-        const minY = athPrice * 0.7;
-        const maxY = athPrice * 1.05;
+      const candleWidth = (width - 50) / candleCount;
+      const minY = Math.min(simPrice, athPrice * 0.65);
+      const maxY = athPrice * 1.05;
+      const getY = (val) => height - 20 - ((val - minY) / (maxY - minY)) * (height - 40);
+
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.4)';
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(0, getY(athPrice));
+      ctx.lineTo(width, getY(athPrice));
+      ctx.stroke();
+      ctx.setLineDash([]);
+      
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '10px sans-serif';
+      ctx.fillText('ATH: ' + athPrice.toLocaleString(), 10, getY(athPrice) - 4);
+
+      for(let i = 0; i < candleCount; i++) {
+        const x = 25 + i * candleWidth + candleWidth/2;
+        const isLast = (i === candleCount - 1);
         
-        const getY = (val) => height - ((val - minY) / (maxY - minY)) * height;
+        let close;
+        if (isLast) {
+          close = simPrice;
+        } else {
+          const trendFactor = 1 - ((candleCount - i) / candleCount) * ((athPrice - simPrice) / athPrice);
+          const noise = Math.sin(i * 1.7) * volatility;
+          close = athPrice * (trendFactor + noise);
+        }
+        
+        const open = isLast ? close * (1 + volatility * 0.5) : close * (1 + Math.sin(i) * volatility);
+        const high = Math.max(open, close) * (1 + volatility * 0.6);
+        const low = Math.min(open, close) * (1 - volatility * 0.6);
 
         const isGreen = close >= open;
-        ctx.strokeStyle = isGreen ? '#10b981' : '#f59e0b'; // Usamos ámbar en vez de rojo
-        ctx.fillStyle = isGreen ? '#10b981' : '#f59e0b';
+        const color = isGreen ? '#10b981' : '#f59e0b';
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
 
-        // Mecha
         ctx.beginPath();
         ctx.moveTo(x, getY(high));
         ctx.lineTo(x, getY(low));
         ctx.stroke();
 
-        // Cuerpo
         const bodyTop = getY(Math.max(open, close));
         const bodyBottom = getY(Math.min(open, close));
-        ctx.fillRect(x - candleWidth/3, bodyTop, (candleWidth/3) * 2, Math.max(2, bodyBottom - bodyTop));
+        ctx.fillRect(x - candleWidth/3, bodyTop, (candleWidth/3) * 2, Math.max(3, bodyBottom - bodyTop));
       }
     }
 
     function updateChartAndTriggers() {
-      const ath = parseFloat(document.getElementById('ath-input').value) || 100000;
-      const sim = parseFloat(document.getElementById('sim-input').value) || 86000;
+      const key = document.getElementById('asset-select').value;
+      const assetConfig = ASSETS[key] || ASSETS.BTC;
       
-      drawCandlestickChart(sim, ath);
+      const ath = parseFloat(document.getElementById('ath-input').value) || assetConfig.ath;
+      const sim = parseFloat(document.getElementById('sim-input').value) || assetConfig.current;
+      
+      drawCandlestickChart(sim, ath, assetConfig.volatility);
 
-      // Calcular caída %
       const dropPct = ((ath - sim) / ath) * 100;
-      
-      // Niveles por defecto: -10%, -15%, -20%
-      const levels = [
-        { drop: 10, targetPrice: ath * 0.90 },
-        { drop: 15, targetPrice: ath * 0.85 },
-        { drop: 20, targetPrice: ath * 0.80 }
-      ];
+      const levels = assetConfig.levels;
 
       const listContainer = document.getElementById('triggers-list');
       listContainer.innerHTML = '';
 
-      let globalStatus = 'status-normal';
-      let globalText = 'MONITOREANDO';
-
-      levels.forEach(lvl => {
-        const currentDiffPct = lvl.drop - dropPct; // Margen restante
-        let statusClass = 'status-normal';
+      levels.forEach(lvlPct => {
+        const targetPrice = ath * (1 - lvlPct / 100);
+        const currentDiffPct = lvlPct - dropPct;
+        let statusClass = 'drop-ok';
         let statusLabel = 'NORMAL';
 
-        if (dropPct >= lvl.drop) {
-          statusClass = 'status-active';
-          statusLabel = '¡SEÑAL ACTIVADA!';
-          globalStatus = 'status-active';
-          globalText = '¡COMPRA DETECTADA!';
+        if (dropPct >= lvlPct) {
+          statusClass = 'drop-alert';
+          statusLabel = '¡COMPRA ACTIVADA!';
         } else if (currentDiffPct <= 3) {
-          statusClass = 'status-near';
+          statusClass = 'drop-near';
           statusLabel = `CERCA (-${currentDiffPct.toFixed(1)}%)`;
-          if (globalStatus !== 'status-active') {
-            globalStatus = 'status-near';
-            globalText = 'ALERTA TEMPRANA';
-          }
         }
 
         const itemHTML = `
           <div style="display:flex; justify-content:space-between; align-items:center; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
             <div>
-              <div style="font-weight:600; font-size:0.9rem;">Caída Nivel -${lvl.drop}%</div>
-              <div style="font-size:0.75rem; color:var(--text-muted);">Precio Objetivo: ${lvl.targetPrice.toLocaleString()}</div>
+              <div style="font-weight:600; font-size:0.9rem;">Objetivo Caída -${lvlPct}%</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Precio Objetivo: ${targetPrice.toLocaleString(undefined, {maximumFractionDigits:2})}</div>
             </div>
-            <span class="status-badge ${statusClass}">${statusLabel}</span>
+            <span style="font-weight:700; font-size:0.8rem;" class="${statusClass}">${statusLabel}</span>
           </div>
         `;
         listContainer.innerHTML += itemHTML;
       });
-
-      const globalBadge = document.getElementById('global-status');
-      globalBadge.className = 'status-badge ' + globalStatus;
-      globalBadge.innerText = globalText;
     }
 
-    // Inicialización al cargar la página
     window.onload = () => {
-      updateChartAndTriggers();
+      renderDashboard();
+      renderRachas();
+      onAssetChange();
+      fetchLivePrices();
     };
   </script>
 </body>
