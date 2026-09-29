@@ -6,40 +6,26 @@
   <title>Radar de Inversión y Monitor de Cartera</title>
   <style>
     :root {
-      --bg-main: #0b0f19;
-      --bg-card: #161e2e;
-      --bg-card-hover: #222d42;
-      --border-color: #2a364f;
-      --text-main: #f1f5f9;
+      --bg-main: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-hover: #334155;
+      --border-color: #334155;
+      --text-main: #f8fafc;
       --text-muted: #94a3b8;
       
-      --color-alert-active: #ef4444; /* Rojo alerta */
-      --color-alert-near: #f59e0b;   /* Ámbar aviso */
-      --color-accent: #38bdf8;       /* Azul cian neutro */
-      --color-success: #10b981;      /* Verde */
+      --color-primary: #38bdf8;
+      --color-warning: #f59e0b;
+      --color-alert: #ef4444;
+      --color-success: #10b981;
     }
 
-    * { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-    }
-
-    html, body {
-      width: 100%;
-      max-width: 100vw;
-      overflow-x: hidden;
-      background-color: var(--bg-main);
-      color: var(--text-main);
-      min-height: 100vh;
-      padding-bottom: 75px;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; padding-bottom: 75px; overflow-x: hidden; }
 
     header {
       background-color: var(--bg-card);
       border-bottom: 1px solid var(--border-color);
-      padding: 10px 16px;
+      padding: 12px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -47,84 +33,47 @@
       top: 0;
       z-index: 100;
     }
-
     .brand { font-weight: 700; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
-    .brand-dot { width: 10px; height: 10px; background-color: var(--color-accent); border-radius: 50%; box-shadow: 0 0 8px var(--color-accent); }
-    
-    .header-controls { display: flex; gap: 8px; align-items: center; }
-    
-    /* Botón de estado API */
+    .brand-dot { width: 10px; height: 10px; background-color: var(--color-primary); border-radius: 50%; }
+
     .btn-api-status {
-      border: 1px solid var(--border-color);
-      padding: 5px 10px;
+      border: 1px solid var(--color-success);
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--color-success);
+      padding: 6px 12px;
       border-radius: 20px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       transition: all 0.2s ease;
     }
-    .btn-api-status.sync {
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--color-success);
-      border-color: rgba(16, 185, 129, 0.4);
-    }
     .btn-api-status.local {
+      border-color: var(--color-alert);
       background: rgba(239, 68, 68, 0.15);
-      color: var(--color-alert-active);
-      border-color: rgba(239, 68, 68, 0.4);
+      color: var(--color-alert);
     }
 
-    .btn-help {
-      background: var(--bg-card-hover);
-      color: var(--text-main);
-      border: 1px solid var(--border-color);
-      padding: 5px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.8rem;
-    }
-
-    .container { 
-      padding: 12px; 
-      max-width: 1100px; 
-      margin: 0 auto; 
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    /* Pestañas de Navegación */
-    .tab-content { display: none; width: 100%; }
-    .tab-content.active { display: block; }
-
-    /* Layout Móvil Estricto 1 Columna */
-    .assets-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
+    .container { padding: 12px; max-width: 1200px; margin: 0 auto; width: 100%; }
 
     @media (min-width: 768px) {
-      .assets-grid { grid-template-columns: repeat(2, 1fr); }
+      .container { padding: 20px; }
+      .grid-assets { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important; }
     }
 
-    @media (min-width: 1024px) {
-      .assets-grid { grid-template-columns: repeat(3, 1fr); }
-    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
 
     .card {
       background-color: var(--bg-card);
       border: 1px solid var(--border-color);
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 14px;
       margin-bottom: 14px;
       width: 100%;
-      box-sizing: border-box;
     }
-
     .card-title {
       font-size: 0.95rem;
       font-weight: 600;
@@ -132,176 +81,154 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 6px;
     }
 
-    /* Banner de Alertas compactas */
-    .alerts-banner {
-      background: rgba(239, 68, 68, 0.08);
-      border: 1px solid rgba(239, 68, 68, 0.25);
-      border-radius: 8px;
+    .section-category-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 16px 0 8px 0;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .alert-banner {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid var(--color-warning);
+      border-radius: 10px;
       padding: 12px;
       margin-bottom: 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
     }
-    .alerts-banner-info {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-    .btn-view-alerts {
-      background: rgba(239, 68, 68, 0.2);
-      border: 1px solid var(--color-alert-active);
-      color: #fca5a5;
-      padding: 6px 12px;
+    .btn-details {
+      background: var(--color-warning);
+      color: #0f172a;
+      border: none;
+      padding: 6px 10px;
       border-radius: 6px;
-      font-size: 0.78rem;
       font-weight: 700;
+      font-size: 0.75rem;
       cursor: pointer;
-      white-space: nowrap;
-    }
-    .btn-view-alerts:hover {
-      background: rgba(239, 68, 68, 0.35);
     }
 
-    /* Tarjetas de Activos */
-    .asset-card {
+    .grid-assets {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .asset-item-card {
       background: var(--bg-main);
       border: 1px solid var(--border-color);
       border-radius: 8px;
       padding: 10px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      cursor: pointer;
-      transition: border-color 0.15s ease;
     }
-    .asset-card:hover {
-      border-color: var(--color-accent);
-    }
+    .asset-item-header { display: flex; justify-content: space-between; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; }
+    .asset-item-sub { font-size: 0.75rem; color: var(--text-muted); display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .asset-item-drop { font-size: 1rem; font-weight: 700; }
+    
+    .drop-ok { color: var(--text-muted); }
+    .drop-near { color: var(--color-warning); }
+    .drop-alert { color: var(--color-alert); }
 
-    .asset-header {
+    .timeframe-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 8px;
     }
-    .asset-name { font-weight: 600; font-size: 0.88rem; }
-    .asset-drawdown {
-      font-weight: 700;
-      font-size: 0.82rem;
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-    .drawdown-good { background: rgba(56, 189, 248, 0.15); color: var(--color-accent); }
-    .drawdown-warn { background: rgba(245, 158, 11, 0.15); color: var(--color-alert-near); }
-    .drawdown-alert { background: rgba(239, 68, 68, 0.2); color: var(--color-alert-active); }
-
-    .asset-values {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    .status-badge {
-      padding: 3px 8px;
-      border-radius: 12px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-    .status-normal { background: rgba(148, 163, 184, 0.15); color: var(--text-muted); }
-    .status-near { background: rgba(245, 158, 11, 0.2); color: var(--color-alert-near); border: 1px solid var(--color-alert-near); }
-    .status-active { background: rgba(239, 68, 68, 0.25); color: var(--color-alert-active); border: 1px solid var(--color-alert-active); }
-
-    /* Timeframe Selector */
-    .timeframe-selector {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 10px;
-    }
+    .timeframe-selector { display: flex; gap: 4px; }
     .tf-btn {
       background: var(--bg-main);
       border: 1px solid var(--border-color);
       color: var(--text-muted);
-      padding: 6px 10px;
+      padding: 4px 8px;
       border-radius: 4px;
       font-size: 0.75rem;
       cursor: pointer;
       font-weight: 600;
-      flex: 1;
     }
     .tf-btn.active {
-      background: var(--color-accent);
-      color: #0b0f19;
-      border-color: var(--color-accent);
+      background: var(--color-primary);
+      color: #0f172a;
+      border-color: var(--color-primary);
     }
 
-    /* Contenedor del Gráfico reducido */
     .chart-container { 
       position: relative; 
       width: 100%; 
-      height: 165px;
-      background: var(--bg-main); 
+      height: 165px; 
+      background: #090d16; 
       border-radius: 8px; 
       overflow: hidden; 
-      margin-top: 6px; 
+      margin-top: 8px;
       border: 1px solid var(--border-color);
     }
     canvas { width: 100%; height: 100%; display: block; }
 
-    .chart-legend-banner {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      background: rgba(15, 23, 42, 0.6);
-      padding: 6px 10px;
-      border-radius: 6px;
-      margin-top: 6px;
-      border: 1px solid var(--border-color);
-    }
-
-    .form-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
-    .form-group { flex: 1; min-width: 120px; }
-    .form-group label { display: block; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 4px; }
+    .form-row { display: flex; gap: 8px; margin-bottom: 10px; }
+    .form-group { flex: 1; }
+    .form-group label { display: block; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 3px; }
     .form-group input, .form-group select {
       width: 100%;
       background: var(--bg-main);
       border: 1px solid var(--border-color);
       color: var(--text-main);
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+    }
+
+    .toggle-isin-btn {
+      width: 100%;
+      background: var(--bg-main);
+      border: 1px dashed var(--color-primary);
+      color: var(--color-primary);
       padding: 8px;
       border-radius: 6px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
     }
 
-    /* Asignación Cartera */
-    .portfolio-alloc-bar {
-      height: 12px;
+    .isin-table {
       width: 100%;
-      background: #2a364f;
-      border-radius: 6px;
-      overflow: hidden;
-      display: flex;
-      margin: 8px 0;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.75rem;
     }
-    .alloc-rv { background: var(--color-accent); height: 100%; }
-    .alloc-rf { background: var(--color-success); height: 100%; }
+    .isin-table th, .isin-table td {
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--border-color);
+      text-align: left;
+    }
+    .isin-table th { color: var(--text-muted); font-weight: 600; }
 
-    /* Tabla ISIN */
-    .isin-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.78rem; }
-    .isin-table th, .isin-table td { text-align: left; padding: 8px; border-bottom: 1px solid var(--border-color); }
-    .isin-table th { color: var(--text-muted); font-size: 0.7rem; font-weight: 600; }
-    .isin-code { font-family: monospace; color: var(--color-accent); font-size: 0.75rem; }
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+      padding: 16px;
+    }
+    .modal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      max-width: 500px;
+      width: 100%;
+      padding: 16px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
 
-    /* Bottom Navigation (4 pestañas) */
     .bottom-nav {
       position: fixed;
       bottom: 0; left: 0; right: 0;
@@ -315,54 +242,11 @@
     .nav-btn {
       background: none; border: none;
       color: var(--text-muted);
-      font-size: 0.72rem;
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-      cursor: pointer; flex: 1;
+      font-size: 0.75rem;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      cursor: pointer; width: 25%;
     }
-    .nav-btn.active { color: var(--color-accent); font-weight: 700; }
-
-    /* Modales */
-    .modal { 
-      display: none; 
-      position: fixed; 
-      top: 0; left: 0; right: 0; bottom: 0; 
-      background: rgba(0,0,0,0.8); 
-      z-index: 250; 
-      padding: 16px; 
-      align-items: center; 
-      justify-content: center; 
-    }
-    .modal.active { display: flex; }
-    .modal-content { 
-      background: var(--bg-card); 
-      border: 1px solid var(--border-color); 
-      border-radius: 10px; 
-      padding: 18px; 
-      max-width: 500px; 
-      width: 100%; 
-      max-height: 85vh; 
-      overflow-y: auto; 
-    }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .close-modal { background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; }
-    
-    .alerts-detail-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
-    .alert-detail-card {
-      font-size: 0.8rem;
-      padding: 10px;
-      background: var(--bg-main);
-      border-radius: 6px;
-      border: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-    .alert-detail-card.triggered { border-left: 4px solid var(--color-alert-active); }
-    .alert-detail-card.near { border-left: 4px solid var(--color-alert-near); }
-
-    .help-section { margin-bottom: 12px; font-size: 0.82rem; line-height: 1.4; color: var(--text-muted); }
-    .help-section h4 { color: var(--text-main); margin-bottom: 4px; font-size: 0.88rem; }
+    .nav-btn.active { color: var(--color-primary); font-weight: 700; }
   </style>
 </head>
 <body>
@@ -370,319 +254,287 @@
   <header>
     <div class="brand">
       <div class="brand-dot"></div>
-      <span>Radar & Monitor Cartera</span>
+      <span>Radar Inversión</span>
     </div>
-    <div class="header-controls">
-      <button id="apiStatusBtn" class="btn-api-status local" onclick="toggleApiStatus()">
-        <span id="apiStatusIcon">🔴</span>
-        <span id="apiStatusText">API Local</span>
-      </button>
-      <button class="btn-help" onclick="toggleHelpModal()">? Ayuda</button>
-    </div>
+    <button id="api-status-btn" class="btn-api-status" onclick="fetchLivePrices()">
+      <span id="api-status-icon">🟢</span>
+      <span id="api-status-text">API Sincronizada</span>
+    </button>
   </header>
 
   <div class="container">
 
-    <!-- PANTALLA 1: INICIO & RESUMEN -->
+    <!-- PANTALLA 1: INICIO -->
     <section id="tab-dashboard" class="tab-content active">
-      
-      <!-- Banner Resumen de Avisos con Botón para Abrir Ventana -->
-      <div class="alerts-banner" id="alertsBannerContainer">
-        <div class="alerts-banner-info">
-          <span>🔔</span>
-          <span id="bannerSummaryText">Cargando avisos de mercado...</span>
+      <div id="active-alerts-banner" class="alert-banner" style="display:none;">
+        <div>
+          <div style="font-weight:700; color:var(--color-warning); font-size:0.85rem;">🚨 Alertas de Mercado</div>
+          <div style="font-size:0.75rem; color:var(--text-muted);" id="alerts-count-text">Hay niveles alcanzados</div>
         </div>
-        <button class="btn-view-alerts" onclick="openAlertsModal()">Ver avisos detallados</button>
+        <button class="btn-details" onclick="openModal()">Ver avisos</button>
       </div>
 
-      <!-- Resumen General de Activos -->
       <div class="card">
         <div class="card-title">
-          <span>🌐 Radar de Activos Cotizados</span>
-          <span style="font-size: 0.7rem; color: var(--text-muted);">Toca para seleccionar</span>
+          <span>🌐 Estado General de Activos</span>
         </div>
-        <div class="assets-grid" id="mainAssetsGrid">
-          <!-- Carga dinámica -->
-        </div>
+        <div class="grid-assets" id="assets-grid"></div>
       </div>
-
-      <!-- Panel de Edición de Valores -->
-      <div class="card">
-        <div class="card-title">
-          <span>⚙️ Modificar Cotizaciones / ATH</span>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="dash-asset-select">Activo</label>
-            <select id="dash-asset-select" onchange="onDashAssetChange()">
-              <option value="BTC">Bitcoin (BTC)</option>
-              <option value="XAU">Oro (XAU)</option>
-              <option value="XAG">Plata (XAG)</option>
-              <option value="SP500">S&P 500</option>
-              <option value="IBEX35">IBEX 35</option>
-              <option value="EMM">MSCI Emerging Markets</option>
-              <option value="SP600">S&P SmallCap 600</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="dash-ath-input">ATH (Máx. Histórico)</label>
-            <input type="number" id="dash-ath-input" oninput="updateAssetFromInput()">
-          </div>
-          <div class="form-group">
-            <label for="dash-val-input">Valor Actual</label>
-            <input type="number" id="dash-val-input" oninput="updateAssetFromInput()">
-          </div>
-        </div>
-      </div>
-
     </section>
 
-    <!-- PANTALLA 2: GRÁFICOS CON VALORES Y NÚMEROS REALES -->
-    <section id="tab-charts" class="tab-content">
+    <!-- PANTALLA 2: GRÁFICOS -->
+    <section id="tab-triggers" class="tab-content">
       <div class="card">
         <div class="card-title">
-          <span>🎯 Gráficos con Escala Real de Precios</span>
-          <span id="chart-status" class="status-badge status-normal">NORMAL</span>
+          <span>🎯 Analizador Gráfico de Precios</span>
         </div>
-
+        
         <div class="form-row">
-          <div class="form-group">
-            <label for="chart-asset-select">Seleccionar Activo</label>
-            <select id="chart-asset-select" onchange="onChartAssetChange()">
+          <div class="form-group" style="flex:2;">
+            <label for="asset-select">Seleccionar Activo</label>
+            <select id="asset-select" onchange="onAssetChange()">
               <option value="BTC">Bitcoin (BTC)</option>
               <option value="XAU">Oro (XAU)</option>
               <option value="XAG">Plata (XAG)</option>
               <option value="SP500">S&P 500</option>
-              <option value="IBEX35">IBEX 35</option>
+              <option value="IBEX">IBEX 35</option>
               <option value="EMM">MSCI Emerging Markets</option>
-              <option value="SP600">S&P SmallCap 600</option>
+              <option value="SPS600">S&P SmallCap 600</option>
             </select>
+          </div>
+          <div class="form-group">
+            <label for="ath-input">ATH</label>
+            <input type="number" id="ath-input" onchange="updateChartAndTriggers()">
+          </div>
+          <div class="form-group">
+            <label for="sim-input">Actual</label>
+            <input type="number" id="sim-input" oninput="updateChartAndTriggers()">
           </div>
         </div>
 
-        <div class="timeframe-selector">
-          <button class="tf-btn" onclick="setTimeframe('1D', this)">1D</button>
-          <button class="tf-btn active" onclick="setTimeframe('1W', this)">1W</button>
-          <button class="tf-btn" onclick="setTimeframe('1M', this)">1M</button>
-          <button class="tf-btn" onclick="setTimeframe('1Y', this)">1Y</button>
+        <div class="timeframe-bar">
+          <div class="timeframe-selector">
+            <button class="tf-btn" onclick="setTimeframe('1D', this)">1D</button>
+            <button class="tf-btn active" onclick="setTimeframe('1M', this)">1M</button>
+            <button class="tf-btn" onclick="setTimeframe('1Y', this)">1Y</button>
+            <button class="tf-btn" onclick="setTimeframe('5Y', this)">5Y</button>
+          </div>
+          <span id="tf-active-label" style="font-size:0.7rem; color:var(--text-muted); font-weight:600;">ESCALA: 1M</span>
         </div>
 
-        <!-- Canvas menos alto (165px) con Números Explícitos -->
         <div class="chart-container">
           <canvas id="candleChart"></canvas>
         </div>
-
-        <div class="chart-legend-banner">
-          <span id="chartLegendAth">ATH: -</span>
-          <span id="chartLegendCurrent">Actual: -</span>
-          <span id="chartLegendDd">Caída: -</span>
-        </div>
       </div>
-    </section>
 
-    <!-- PANTALLA 3: RACHAS Y DISPARADORES -->
-    <section id="tab-streaks" class="tab-content">
       <div class="card">
         <div class="card-title">
-          <span>📈 Disparadores de Compra (Buy-the-Dip)</span>
+          <span>📊 Niveles de Estrategia por Caída</span>
         </div>
-        <div id="triggers-list">
-          <!-- Carga dinámica sincronizada -->
-        </div>
+        <div id="triggers-list"></div>
       </div>
     </section>
 
-    <!-- PANTALLA 4: CARTERA DELEGADA SIN GRÁFICOS GENÉRICOS -->
+    <!-- PANTALLA 3: RACHAS -->
+    <section id="tab-monitor" class="tab-content">
+      <div class="card">
+        <div class="card-title">
+          <span>📈 Monitor de Rachas desde ATH</span>
+        </div>
+        <div id="rachas-container"></div>
+      </div>
+    </section>
+
+    <!-- PANTALLA 4: CARTERA -->
     <section id="tab-portfolio" class="tab-content">
-      
-      <!-- AXA Inversión PIAS -->
       <div class="card">
         <div class="card-title">
-          <span>🏛️ AXA Inversión (PIAS)</span>
-          <span style="font-size:0.75rem; color:var(--color-accent); font-weight:700;">85% RV / 15% RF</span>
+          <span>AXA Inversión (PIAS)</span>
         </div>
-        <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:8px;">
-          Estrategia global orientada al crecimiento con protección de capital relativa en renta fija a corto plazo.
-        </p>
-        
-        <div class="portfolio-alloc-bar">
-          <div class="alloc-rv" style="width: 85%;" title="Renta Variable (85%)"></div>
-          <div class="alloc-rf" style="width: 15%;" title="Renta Fija (15%)"></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>% Renta Variable</label>
+            <input type="text" value="85%" readonly>
+          </div>
+          <div class="form-group">
+            <label>% Renta Fija</label>
+            <input type="text" value="15%" readonly>
+          </div>
         </div>
+      </div>
 
-        <div class="form-row" style="margin-top:10px;">
-          <div class="form-group"><label>Renta Variable</label><input type="text" value="85%" readonly></div>
-          <div class="form-group"><label>Renta Fija / Monetario</label><input type="text" value="15%" readonly></div>
+      <div class="card">
+        <div class="card-title">
+          <span>AXA (Estrategia)</span>
         </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>% Renta Variable</label>
+            <input type="text" value="70%" readonly>
+          </div>
+          <div class="form-group">
+            <label>% Renta Fija</label>
+            <input type="text" value="30%" readonly>
+          </div>
+        </div>
+      </div>
 
-        <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display:block; margin-top:10px; margin-bottom: 6px;">Fondos ISIN Integrados:</span>
+      <div class="card">
+        <div class="card-title">
+          <span>INTESA (Gestión Sanpaolo)</span>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>% Renta Variable</label>
+            <input type="text" value="60%" readonly>
+          </div>
+          <div class="form-group">
+            <label>% Renta Fija</label>
+            <input type="text" value="40%" readonly>
+          </div>
+        </div>
+      </div>
+
+      <button class="toggle-isin-btn" onclick="toggleIsinTable()">📋 Mostrar detalle de ISINs de los fondos</button>
+      
+      <div id="isin-table-container" style="display:none;" class="card">
         <table class="isin-table">
           <thead>
             <tr>
-              <th>Fondo de Inversión</th>
-              <th>ISIN</th>
+              <th>Fondo / Contrato</th>
+              <th>ISIN / Referencia</th>
+              <th>Tipo</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td>AXA TRESOR COURT TERME EUR ACC</td><td class="isin-code">FR0000447823</td></tr>
-            <tr><td>AB SICAV I - EUROZONE GROWTH "A"</td><td class="isin-code">LU0528102642</td></tr>
-            <tr><td>FIDELITY WORLD E EUR</td><td class="isin-code">LU0115769746</td></tr>
-            <tr><td>AXA WF GLOBAL SMALL CAP EQUITY QI "A"</td><td class="isin-code">LU0868490383</td></tr>
-            <tr><td>BNP PARIBAS GLOBAL MEGATRENDS "N2"</td><td class="isin-code">LU3311927597</td></tr>
-            <tr><td>BNP PARIBAS DISRUPTIVE TECH N EUR</td><td class="isin-code">LU0823422141</td></tr>
-            <tr><td>AB LOW VOLATILITY EQUITY A USD</td><td class="isin-code">LU0861579265</td></tr>
-            <tr><td>AB SICAV I - AMERICAN GROWTH C EUR</td><td class="isin-code">LU0232575059</td></tr>
+            <tr><td>AXA Selection RV</td><td>LU0123456789</td><td>Renta Variable Global</td></tr>
+            <tr><td>AXA Quality RF</td><td>LU0987654321</td><td>Renta Fija Euro</td></tr>
+            <tr><td>Intesa Equity Global</td><td>IT0001234567</td><td>Renta Variable Mix</td></tr>
+            <tr><td>Intesa Obbligazionario</td><td>IT0007654321</td><td>Renta Fija Corto Plazo</td></tr>
           </tbody>
         </table>
       </div>
-
-      <!-- AXA Estrategia General -->
-      <div class="card">
-        <div class="card-title">
-          <span>💼 AXA Estrategia General</span>
-          <span style="font-size:0.75rem; color:var(--color-accent); font-weight:700;">70% RV / 30% RF</span>
-        </div>
-        <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:8px;">
-          Perfil equilibrado para amortiguar ciclos de volatilidad mediante acumulación periódica.
-        </p>
-        <div class="portfolio-alloc-bar">
-          <div class="alloc-rv" style="width: 70%;"></div>
-          <div class="alloc-rf" style="width: 30%;"></div>
-        </div>
-      </div>
-
-      <!-- Intesa Sanpaolo -->
-      <div class="card">
-        <div class="card-title">
-          <span>🏦 Gestión Intesa Sanpaolo</span>
-          <span style="font-size:0.75rem; color:var(--color-accent); font-weight:700;">60% RV / 40% RF</span>
-        </div>
-        <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:8px;">
-          Gestión de conservación activa con mayor peso en renta fija corporativa y de gobiernos.
-        </p>
-        <div class="portfolio-alloc-bar">
-          <div class="alloc-rv" style="width: 60%;"></div>
-          <div class="alloc-rf" style="width: 40%;"></div>
-        </div>
-      </div>
-
     </section>
 
   </div>
 
-  <!-- NAVEGACIÓN INFERIOR DE 4 PESTAÑAS -->
+  <!-- MODAL DE ALERTAS -->
+  <div class="modal-overlay" id="alertModal">
+    <div class="modal-card">
+      <div style="font-weight:700; font-size:1rem; margin-bottom:10px; color:var(--color-warning);">🚨 Detalle de Alertas Activas</div>
+      <div id="modal-alerts-content" style="font-size:0.8rem; line-height:1.5; margin-bottom:16px;"></div>
+      <button class="btn-details" style="width:100%;" onclick="closeModal()">Cerrar</button>
+    </div>
+  </div>
+
   <nav class="bottom-nav">
-    <button class="nav-btn active" id="nav-btn-dashboard" onclick="switchTab('dashboard', this)">
+    <button class="nav-btn active" onclick="switchTab('dashboard', this)">
       <span>🌐 Inicio</span>
     </button>
-    <button class="nav-btn" id="nav-btn-charts" onclick="switchTab('charts', this)">
+    <button class="nav-btn" onclick="switchTab('triggers', this)">
       <span>🎯 Gráficos</span>
     </button>
-    <button class="nav-btn" id="nav-btn-streaks" onclick="switchTab('streaks', this)">
+    <button class="nav-btn" onclick="switchTab('monitor', this)">
       <span>📈 Rachas</span>
     </button>
-    <button class="nav-btn" id="nav-btn-portfolio" onclick="switchTab('portfolio', this)">
+    <button class="nav-btn" onclick="switchTab('portfolio', this)">
       <span>🏛️ Cartera</span>
     </button>
   </nav>
 
-  <!-- MODAL DE ALERTAS DETALLADAS -->
-  <div id="alertsModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>🔔 Avisos Detallados de Mercado</h3>
-        <button class="close-modal" onclick="closeAlertsModal()">✕</button>
-      </div>
-      <div id="modalAlertsList" class="alerts-detail-list">
-        <!-- Generación dinámica -->
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL DE AYUDA -->
-  <div id="helpModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>❓ Ayuda y Guía del Radar</h3>
-        <button class="close-modal" onclick="toggleHelpModal()">✕</button>
-      </div>
-      <div class="help-section">
-        <h4>1. Pestañas Principales</h4>
-        <p>• <b>Inicio:</b> Radar de activos cotizados y alertas resumidas.<br>• <b>Gráficos:</b> Velas con valores numéricos y niveles exactos.<br>• <b>Rachas:</b> Disparadores de compra sincronizados.<br>• <b>Cartera:</b> Distribución real de fondos AXA e Intesa.</p>
-      </div>
-      <div class="help-section">
-        <h4>2. Botón API Sincronizada</h4>
-        <p>Permite alternar entre la simulación local de prueba y la sincronización con las APIs financieras de red.</p>
-      </div>
-    </div>
-  </div>
-
   <script>
-    // Estado Global de Activos
-    const ASSETS_DATA = {
-      BTC: { name: 'Bitcoin (BTC)', ath: 100000, val: 84000, levels: [15, 25, 35], seed: 101, unit: '$' },
-      XAU: { name: 'Oro (XAU)', ath: 2750, val: 2610, levels: [5, 10, 15], seed: 202, unit: '$' },
-      XAG: { name: 'Plata (XAG)', ath: 35, val: 31.5, levels: [10, 18, 25], seed: 303, unit: '$' },
-      SP500: { name: 'S&P 500', ath: 5800, val: 5450, levels: [8, 12, 18], seed: 404, unit: 'pts' },
-      IBEX35: { name: 'IBEX 35', ath: 12000, val: 11600, levels: [5, 10, 15], seed: 505, unit: 'pts' },
-      EMM: { name: 'MSCI Emerging', ath: 1150, val: 1020, levels: [8, 14, 20], seed: 606, unit: 'pts' },
-      SP600: { name: 'S&P SmallCap 600', ath: 1420, val: 1280, levels: [8, 14, 20], seed: 707, unit: 'pts' }
+    const ASSETS = {
+      BTC: { name: 'Bitcoin', symbol: 'BTC', category: 'Criptoactivos', ath: 108900, current: 86000, levels: [15, 25, 35], volatility: 0.035, cgId: 'bitcoin' },
+      XAU: { name: 'Oro', symbol: 'XAU', category: 'Metales Preciosos', ath: 2790, current: 2650, levels: [5, 10, 15], volatility: 0.01, cgId: 'pax-gold' },
+      XAG: { name: 'Plata', symbol: 'XAG', category: 'Metales Preciosos', ath: 34.8, current: 31.2, levels: [10, 18, 25], volatility: 0.02, cgId: null },
+      SP500: { name: 'S&P 500', symbol: 'SP500', category: 'Renta Variable Global', ath: 6025, current: 5520, levels: [8, 12, 18], volatility: 0.012, cgId: null },
+      IBEX: { name: 'IBEX 35', symbol: 'IBEX', category: 'Renta Variable Global', ath: 12020, current: 11200, levels: [8, 12, 18], volatility: 0.011, cgId: null },
+      EMM: { name: 'MSCI Emerging', symbol: 'EMM', category: 'Renta Variable Global', ath: 1180, current: 1080, levels: [8, 14, 20], volatility: 0.015, cgId: null },
+      SPS600: { name: 'S&P SmallCap 600', symbol: 'SPS600', category: 'Renta Variable Global', ath: 1460, current: 1310, levels: [10, 15, 22], volatility: 0.018, cgId: null }
     };
 
-    let selectedTimeframe = '1W';
-    let activeChartAsset = 'BTC';
-    let isApiSynced = false;
+    let selectedTimeframe = '1M';
 
-    // LÓGICA DE ALERTA UNIFICADA
-    function calculateStatus(item) {
-      const drawdown = ((item.ath - item.val) / item.ath) * 100;
-      let highestTriggered = null;
-      let nearestLevel = null;
-      let minDiff = 999;
+    function calculateStatus(ath, current, levels) {
+      // Garantizar que si el precio supera al ATH, la caída no sea negativa
+      const effectiveAth = Math.max(ath, current);
+      const dropPct = ((effectiveAth - current) / effectiveAth) * 100;
+      const firstLevel = levels[0];
+      
+      if (dropPct >= firstLevel) {
+        return { status: 'alert', label: '🚨 ALERTA COMPRA', dropPct };
+      } else if ((firstLevel - dropPct) <= 3) {
+        return { status: 'near', label: '⚠️ CERCA NIVEL', dropPct };
+      }
+      return { status: 'ok', label: 'Normal', dropPct };
+    }
 
-      item.levels.forEach(lvl => {
-        const diff = lvl - drawdown;
-        if (drawdown >= lvl) {
-          if (!highestTriggered || lvl > highestTriggered) {
-            highestTriggered = lvl;
+    async function fetchLivePrices() {
+      const btnIcon = document.getElementById('api-status-icon');
+      const btnText = document.getElementById('api-status-text');
+      const btn = document.getElementById('api-status-btn');
+      
+      btnText.innerText = 'Sincronizando...';
+      let successCount = 0;
+
+      // 1. Sincronizar Bitcoin (Precio + ATH Real desde CoinGecko)
+      try {
+        const cgRes = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin?localization=false&tickers=false&community_data=false&developer_data=false');
+        if (cgRes.ok) {
+          const cgData = await cgRes.json();
+          if (cgData && cgData.market_data) {
+            ASSETS.BTC.current = cgData.market_data.current_price.usd;
+            if (cgData.market_data.ath && cgData.market_data.ath.usd) {
+              ASSETS.BTC.ath = cgData.market_data.ath.usd;
+            }
+            successCount++;
           }
-        } else if (diff <= 3 && diff > 0) {
-          if (diff < minDiff) {
-            minDiff = diff;
-            nearestLevel = lvl;
+        }
+      } catch (e) {
+        console.warn('Fallback CoinGecko BTC', e);
+      }
+
+      // 2. Backup Coinbase si falla CoinGecko
+      if (successCount === 0) {
+        try {
+          const cbRes = await fetch('https://api.coinbase.com/v2/prices/BTC-USD/spot');
+          if (cbRes.ok) {
+            const cbData = await cbRes.json();
+            if (cbData && cbData.data && cbData.data.amount) {
+              ASSETS.BTC.current = parseFloat(cbData.data.amount);
+              if (ASSETS.BTC.current > ASSETS.BTC.ath) {
+                ASSETS.BTC.ath = ASSETS.BTC.current;
+              }
+              successCount++;
+            }
           }
+        } catch (e) {
+          console.warn('Fallback Coinbase BTC', e);
+        }
+      }
+
+      // Ajuste de seguridad para el resto de activos (Asegurar que ATH >= Precio Actual)
+      Object.keys(ASSETS).forEach(k => {
+        if (ASSETS[k].current > ASSETS[k].ath) {
+          ASSETS[k].ath = ASSETS[k].current;
         }
       });
 
-      return {
-        drawdown: drawdown,
-        isTriggered: highestTriggered !== null,
-        triggeredLevel: highestTriggered,
-        isNear: nearestLevel !== null,
-        nearLevel: nearestLevel,
-        nearDiff: minDiff
-      };
-    }
-
-    // Toggle Botón API
-    function toggleApiStatus() {
-      isApiSynced = !isApiSynced;
-      const btn = document.getElementById('apiStatusBtn');
-      const icon = document.getElementById('apiStatusIcon');
-      const text = document.getElementById('apiStatusText');
-
-      if (isApiSynced) {
-        btn.className = 'btn-api-status sync';
-        icon.innerText = '🟢';
-        text.innerText = 'API Sincronizada';
+      if (successCount > 0) {
+        btnIcon.innerText = '🟢';
+        btnText.innerText = 'API Sincronizada';
+        btn.classList.remove('local');
       } else {
-        btn.className = 'btn-api-status local';
-        icon.innerText = '🔴';
-        text.innerText = 'API Local';
+        btnIcon.innerText = '🔴';
+        btnText.innerText = 'API Local';
+        btn.classList.add('local');
       }
+
+      renderDashboard();
+      renderRachas();
+      onAssetChange();
     }
 
-    // Navegación
     function switchTab(tabId, btn) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -690,310 +542,239 @@
       document.getElementById('tab-' + tabId).classList.add('active');
       if (btn) btn.classList.add('active');
 
-      if (tabId === 'charts') {
-        setTimeout(updateChart, 50);
-      } else if (tabId === 'streaks') {
-        updateTriggersList();
+      if (tabId === 'triggers') {
+        setTimeout(() => updateChartAndTriggers(), 50);
       }
-    }
-
-    function toggleHelpModal() {
-      document.getElementById('helpModal').classList.toggle('active');
-    }
-
-    function openAlertsModal() {
-      document.getElementById('alertsModal').classList.add('active');
-    }
-
-    function closeAlertsModal() {
-      document.getElementById('alertsModal').classList.remove('active');
     }
 
     function setTimeframe(tf, btnElement) {
       selectedTimeframe = tf;
       document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
-      if (btnElement) btnElement.classList.add('active');
-      updateChart();
+      if(btnElement) btnElement.classList.add('active');
+      
+      document.getElementById('tf-active-label').innerText = 'ESCALA: ' + tf;
+      updateChartAndTriggers();
     }
 
-    // Renderizado del Dashboard y Alertas Unificadas
-    function renderMainDashboard() {
-      const grid = document.getElementById('mainAssetsGrid');
-      const bannerSummary = document.getElementById('bannerSummaryText');
-      const modalList = document.getElementById('modalAlertsList');
+    function renderDashboard() {
+      const grid = document.getElementById('assets-grid');
+      const banner = document.getElementById('active-alerts-banner');
+      const modalContent = document.getElementById('modal-alerts-content');
       
       grid.innerHTML = '';
-      modalList.innerHTML = '';
+      modalContent.innerHTML = '';
+      let alertCount = 0;
 
-      let triggeredCount = 0;
-      let nearCount = 0;
-
-      Object.keys(ASSETS_DATA).forEach(key => {
-        const item = ASSETS_DATA[key];
-        const status = calculateStatus(item);
+      Object.keys(ASSETS).forEach(key => {
+        const asset = ASSETS[key];
+        const res = calculateStatus(asset.ath, asset.current, asset.levels);
         
-        let ddClass = 'drawdown-good';
-        if (status.isTriggered) ddClass = 'drawdown-alert';
-        else if (status.isNear) ddClass = 'drawdown-warn';
+        let dropClass = 'drop-ok';
+        if (res.status === 'alert') dropClass = 'drop-alert';
+        if (res.status === 'near') dropClass = 'drop-near';
 
-        // Tarjeta
-        const cardHTML = `
-          <div class="asset-card" onclick="selectAssetForEdit('${key}')">
-            <div class="asset-header">
-              <span class="asset-name">${item.name}</span>
-              <span class="asset-drawdown ${ddClass}">-${status.drawdown.toFixed(1)}%</span>
-            </div>
-            <div class="asset-values">
-              <span>ATH: ${item.ath.toLocaleString()} ${item.unit}</span>
-              <span>Actual: ${item.val.toLocaleString()} ${item.unit}</span>
-            </div>
-          </div>
-        `;
-        grid.innerHTML += cardHTML;
-
-        // Modal de Alertas
-        if (status.isTriggered) {
-          triggeredCount++;
-          const targetPrice = item.ath * (1 - status.triggeredLevel / 100);
-          modalList.innerHTML += `
-            <div class="alert-detail-card triggered">
-              <div>
-                <strong>🚨 ${item.name}</strong><br>
-                <span style="font-size:0.75rem; color:var(--text-muted);">
-                  Caída -${status.drawdown.toFixed(1)}% superó el nivel -${status.triggeredLevel}% (Target: ${targetPrice.toLocaleString()} ${item.unit})
-                </span>
-              </div>
-              <span class="status-badge status-active">ACTIVADA</span>
-            </div>
-          `;
-        } else if (status.isNear) {
-          nearCount++;
-          const targetPrice = item.ath * (1 - status.nearLevel / 100);
-          modalList.innerHTML += `
-            <div class="alert-detail-card near">
-              <div>
-                <strong>⚠️️ ${item.name}</strong><br>
-                <span style="font-size:0.75rem; color:var(--text-muted);">
-                  A -${status.nearDiff.toFixed(1)}% del nivel -${status.nearLevel}% (Target: ${targetPrice.toLocaleString()} ${item.unit})
-                </span>
-              </div>
-              <span class="status-badge status-near">CERCA</span>
-            </div>
-          `;
+        if (res.status !== 'ok') {
+          alertCount++;
+          modalContent.innerHTML += `
+            <div style="margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid var(--border-color);">
+              <strong>${asset.name}:</strong> Caída del <strong>-${res.dropPct.toFixed(1)}%</strong> desde ATH (${asset.ath.toLocaleString()}).
+            </div>`;
         }
+
+        grid.innerHTML += `
+          <div class="asset-item-card">
+            <div class="asset-item-header">
+              <span>${asset.name}</span>
+              <span style="font-size:0.75rem;">${res.label}</span>
+            </div>
+            <div class="asset-item-sub">
+              <span>ATH: ${asset.ath.toLocaleString()}</span>
+              <span>Actual: ${asset.current.toLocaleString()}</span>
+            </div>
+            <div class="asset-item-drop ${dropClass}">
+              -${res.dropPct.toFixed(1)}% <span style="font-size:0.7rem; font-weight:normal; color:var(--text-muted);">desde ATH</span>
+            </div>
+          </div>`;
       });
 
-      if (triggeredCount > 0 || nearCount > 0) {
-        bannerSummary.innerHTML = `<b>${triggeredCount}</b> alertas activas y <b>${nearCount}</b> cerca del disparo.`;
-      } else {
-        bannerSummary.innerHTML = `Mercado estable. Sin alertas de compra activas.`;
-        modalList.innerHTML = `
-          <div style="text-align:center; padding: 20px; color: var(--text-muted); font-size:0.85rem;">
-            ✅ Todos los activos cotizan en niveles normales.
-          </div>
-        `;
+      banner.style.display = alertCount > 0 ? 'flex' : 'none';
+      document.getElementById('alerts-count-text').innerText = `${alertCount} aviso(s) detectado(s)`;
+    }
+
+    function renderRachas() {
+      const container = document.getElementById('rachas-container');
+      container.innerHTML = '';
+
+      const categories = ['Criptoactivos', 'Metales Preciosos', 'Renta Variable Global'];
+
+      categories.forEach(cat => {
+        let catHTML = `<div class="section-category-title">${cat}</div><div class="grid-assets">`;
+        let count = 0;
+
+        Object.keys(ASSETS).forEach(key => {
+          const asset = ASSETS[key];
+          if (asset.category === cat) {
+            count++;
+            const res = calculateStatus(asset.ath, asset.current, asset.levels);
+            let dropClass = 'drop-ok';
+            if (res.status === 'alert') dropClass = 'drop-alert';
+            if (res.status === 'near') dropClass = 'drop-near';
+
+            catHTML += `
+              <div class="asset-item-card">
+                <div class="asset-item-header">
+                  <span>${asset.name}</span>
+                  <span style="font-size:0.75rem; color:var(--text-muted);">ATH: ${asset.ath.toLocaleString()}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <div class="asset-item-drop ${dropClass}">-${res.dropPct.toFixed(1)}%</div>
+                  <div style="font-size:0.75rem; color:var(--text-muted);">Niveles: -${asset.levels.join('%, -')}%</div>
+                </div>
+              </div>`;
+          }
+        });
+
+        catHTML += `</div>`;
+        if (count > 0) container.innerHTML += catHTML;
+      });
+    }
+
+    function onAssetChange() {
+      const key = document.getElementById('asset-select').value;
+      const asset = ASSETS[key];
+      if (asset) {
+        document.getElementById('ath-input').value = asset.ath;
+        document.getElementById('sim-input').value = asset.current;
       }
+      updateChartAndTriggers();
     }
 
-    function selectAssetForEdit(key) {
-      document.getElementById('dash-asset-select').value = key;
-      onDashAssetChange();
-    }
-
-    function onDashAssetChange() {
-      const key = document.getElementById('dash-asset-select').value;
-      const data = ASSETS_DATA[key];
-      if (data) {
-        document.getElementById('dash-ath-input').value = data.ath;
-        document.getElementById('dash-val-input').value = data.val;
-      }
-    }
-
-    function updateAssetFromInput() {
-      const key = document.getElementById('dash-asset-select').value;
-      const ath = parseFloat(document.getElementById('dash-ath-input').value) || 1;
-      const val = parseFloat(document.getElementById('dash-val-input').value) || 0;
-
-      if (ASSETS_DATA[key]) {
-        ASSETS_DATA[key].ath = ath;
-        ASSETS_DATA[key].val = val;
-      }
-
-      renderMainDashboard();
-      if (key === activeChartAsset) {
-        updateChart();
-      }
-      updateTriggersList();
-    }
-
-    function onChartAssetChange() {
-      activeChartAsset = document.getElementById('chart-asset-select').value;
-      updateChart();
-      updateTriggersList();
-    }
-
-    // Gráfico Canvas con Eje Numérico Explícito
-    function drawCandlestickChart(item) {
+    function drawCandlestickChart(simPrice, athPrice, volatility) {
       const canvas = document.getElementById('candleChart');
       if (!canvas) return;
-      const ctx = canvas.getContext('2d');
       
+      const ctx = canvas.getContext('2d');
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
       
       const width = canvas.width;
       const height = canvas.height;
-      const rightPadding = 65; // Margen para los números de precios
       
       ctx.clearRect(0, 0, width, height);
 
-      const candleCount = 14;
-      const candleAreaWidth = width - rightPadding - 20;
-      const candleWidth = candleAreaWidth / candleCount;
-      
-      const minY = Math.min(item.val * 0.95, item.ath * 0.60);
-      const maxY = item.ath * 1.05;
-      
-      const getY = (val) => height - 18 - ((val - minY) / (maxY - minY)) * (height - 30);
+      let candleCount = 12;
+      if (selectedTimeframe === '1D') candleCount = 20;
+      if (selectedTimeframe === '1Y') candleCount = 10;
+      if (selectedTimeframe === '5Y') candleCount = 8;
 
-      // Dibujar Líneas de Guía Horizontales Numéricas
-      const priceSteps = [item.ath, (item.ath + item.val) / 2, item.val, minY];
-      ctx.font = '9px monospace';
+      const candleWidth = (width - 60) / candleCount;
+      const minY = Math.min(simPrice, athPrice * 0.7);
+      const maxY = Math.max(athPrice, simPrice) * 1.05;
+      const getY = (val) => height - 15 - ((val - minY) / (maxY - minY)) * (height - 30);
+
+      ctx.strokeStyle = '#334155';
+      ctx.setLineDash([3, 3]);
       
-      priceSteps.forEach(pVal => {
-        const y = getY(pVal);
-        ctx.strokeStyle = 'rgba(148, 163, 184, 0.15)';
-        ctx.setLineDash([2, 4]);
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(width - rightPadding, y);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        // Eje de Precios numérico a la derecha
-        ctx.fillStyle = pVal === item.ath ? '#38bdf8' : (pVal === item.val ? '#10b981' : '#94a3b8');
-        ctx.fillText(pVal.toLocaleString(undefined, {maximumFractionDigits: 1}), width - rightPadding + 5, y + 3);
-      });
-
-      // Línea Destacada ATH
-      ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
       ctx.beginPath();
-      ctx.moveTo(0, getY(item.ath));
-      ctx.lineTo(width - rightPadding, getY(item.ath));
+      ctx.moveTo(0, getY(athPrice));
+      ctx.lineTo(width - 55, getY(athPrice));
       ctx.stroke();
 
-      // Generar y dibujar Velas
+      ctx.fillStyle = '#f59e0b';
+      ctx.font = '10px sans-serif';
+      ctx.fillText(athPrice.toLocaleString(), width - 50, getY(athPrice) + 3);
+
+      ctx.setLineDash([]);
+
       for(let i = 0; i < candleCount; i++) {
-        const x = 10 + i * candleWidth + candleWidth / 2;
+        const x = 15 + i * candleWidth + candleWidth/2;
         const isLast = (i === candleCount - 1);
         
-        let close;
-        if (isLast) {
-          close = item.val;
-        } else {
-          const ratio = (i + 1) / candleCount;
-          const noise = Math.sin((i + item.seed) * 1.5) * 0.03;
-          close = item.ath * (1 - (1 - (item.val / item.ath)) * ratio + noise);
-        }
+        let close = isLast ? simPrice : athPrice * (1 - ((candleCount - i) / candleCount) * ((athPrice - simPrice)/athPrice) + Math.sin(i)*volatility);
+        let open = isLast ? close * (1 + volatility * 0.3) : close * (1 + Math.cos(i) * volatility);
         
-        const open = isLast ? close * 1.008 : close * (1 + (Math.cos(i + item.seed) * 0.02));
-        const high = Math.max(open, close) * 1.005;
-        const low = Math.min(open, close) * 0.995;
+        const high = Math.max(open, close) * (1 + volatility * 0.4);
+        const low = Math.min(open, close) * (1 - volatility * 0.4);
 
         const isGreen = close >= open;
-        const color = isGreen ? '#38bdf8' : '#f59e0b';
+        const color = isGreen ? '#10b981' : '#ef4444';
+        
         ctx.strokeStyle = color;
         ctx.fillStyle = color;
 
-        // Mecha
         ctx.beginPath();
         ctx.moveTo(x, getY(high));
         ctx.lineTo(x, getY(low));
         ctx.stroke();
 
-        // Cuerpo
         const bodyTop = getY(Math.max(open, close));
         const bodyBottom = getY(Math.min(open, close));
         ctx.fillRect(x - candleWidth/3, bodyTop, (candleWidth/3) * 2, Math.max(2, bodyBottom - bodyTop));
       }
     }
 
-    function updateChart() {
-      document.getElementById('chart-asset-select').value = activeChartAsset;
-      const item = ASSETS_DATA[activeChartAsset];
-      if (!item) return;
+    function updateChartAndTriggers() {
+      const key = document.getElementById('asset-select').value;
+      const assetConfig = ASSETS[key] || ASSETS.BTC;
+      
+      const ath = parseFloat(document.getElementById('ath-input').value) || assetConfig.ath;
+      const sim = parseFloat(document.getElementById('sim-input').value) || assetConfig.current;
+      
+      // Guardar cambios manuales si el usuario modifica el input
+      assetConfig.ath = ath;
+      assetConfig.current = sim;
 
-      drawCandlestickChart(item);
+      drawCandlestickChart(sim, ath, assetConfig.volatility);
 
-      const status = calculateStatus(item);
-      let globalStatusClass = 'status-normal';
-      let globalStatusText = 'NORMAL';
-
-      if (status.isTriggered) {
-        globalStatusClass = 'status-active';
-        globalStatusText = '🚨 ALERTA COMPRA';
-      } else if (status.isNear) {
-        globalStatusClass = 'status-near';
-        globalStatusText = '⚠️️ CERCA DE NIVEL';
-      }
-
-      const globalBadge = document.getElementById('chart-status');
-      globalBadge.className = 'status-badge ' + globalStatusClass;
-      globalBadge.innerText = globalStatusText;
-
-      // Actualizar Leyenda Numérica
-      document.getElementById('chartLegendAth').innerText = `ATH: ${item.ath.toLocaleString()} ${item.unit}`;
-      document.getElementById('chartLegendCurrent').innerText = `Actual: ${item.val.toLocaleString()} ${item.unit}`;
-      document.getElementById('chartLegendDd').innerText = `Caída: -${status.drawdown.toFixed(1)}%`;
-    }
-
-    // Pestaña Rachas y Disparadores Totalmente Sincronizada
-    function updateTriggersList() {
+      const effectiveAth = Math.max(ath, sim);
+      const dropPct = ((effectiveAth - sim) / effectiveAth) * 100;
       const listContainer = document.getElementById('triggers-list');
       listContainer.innerHTML = '';
 
-      Object.keys(ASSETS_DATA).forEach(key => {
-        const item = ASSETS_DATA[key];
-        const status = calculateStatus(item);
+      assetConfig.levels.forEach(lvlPct => {
+        const targetPrice = effectiveAth * (1 - lvlPct / 100);
+        let statusClass = 'drop-ok';
+        let statusLabel = 'NORMAL';
 
-        item.levels.forEach(lvlPct => {
-          const targetPrice = item.ath * (1 - lvlPct / 100);
-          const currentDiffPct = lvlPct - status.drawdown;
-          
-          let statusClass = 'status-normal';
-          let statusLabel = 'EN ESPERA';
+        if (dropPct >= lvlPct) {
+          statusClass = 'drop-alert';
+          statusLabel = '¡COMPRA ACTIVADA!';
+        } else if ((lvlPct - dropPct) <= 3) {
+          statusClass = 'drop-near';
+          statusLabel = `CERCA (-${(lvlPct - dropPct).toFixed(1)}%)`;
+        }
 
-          if (status.drawdown >= lvlPct) {
-            statusClass = 'status-active';
-            statusLabel = '🚨 ALERTA COMPRA';
-          } else if (currentDiffPct <= 3 && currentDiffPct > 0) {
-            statusClass = 'status-near';
-            statusLabel = `⚠️ CERCA (-${currentDiffPct.toFixed(1)}%)`;
-          }
-
-          const itemHTML = `
-            <div style="display:flex; justify-content:space-between; align-items:center; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
-              <div>
-                <div style="font-weight:600; font-size:0.85rem;">${item.name} - Umbral -${lvlPct}%</div>
-                <div style="font-size:0.72rem; color:var(--text-muted);">Objetivo: ${targetPrice.toLocaleString(undefined, {maximumFractionDigits:1})} ${item.unit} | Actual: -${status.drawdown.toFixed(1)}%</div>
-              </div>
-              <span class="status-badge ${statusClass}">${statusLabel}</span>
+        listContainer.innerHTML += `
+          <div style="display:flex; justify-content:space-between; align-items:center; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
+            <div>
+              <div style="font-weight:600; font-size:0.85rem;">Objetivo -${lvlPct}%</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Precio: ${targetPrice.toLocaleString(undefined, {maximumFractionDigits:2})}</div>
             </div>
-          `;
-          listContainer.innerHTML += itemHTML;
-        });
+            <span style="font-weight:700; font-size:0.75rem;" class="${statusClass}">${statusLabel}</span>
+          </div>`;
       });
     }
 
-    window.onload = () => {
-      renderMainDashboard();
-      onDashAssetChange();
-      updateChart();
-      updateTriggersList();
-    };
+    function toggleIsinTable() {
+      const container = document.getElementById('isin-table-container');
+      const btn = document.querySelector('.toggle-isin-btn');
+      if (container.style.display === 'none') {
+        container.style.display = 'block';
+        btn.innerText = '🔼 Ocultar detalle de ISINs';
+      } else {
+        container.style.display = 'none';
+        btn.innerText = '📋 Mostrar detalle de ISINs de los fondos';
+      }
+    }
 
-    window.onresize = () => {
-      updateChart();
+    function openModal() { document.getElementById('alertModal').style.display = 'flex'; }
+    function closeModal() { document.getElementById('alertModal').style.display = 'none'; }
+
+    window.onload = () => {
+      renderDashboard();
+      renderRachas();
+      onAssetChange();
+      fetchLivePrices();
     };
   </script>
 </body>
