@@ -13,10 +13,10 @@
       --text-main: #f1f5f9;
       --text-muted: #94a3b8;
       
-      --color-alert-active: #ef4444; /* Rojo alerta / API Local */
+      --color-alert-active: #ef4444; /* Rojo alerta */
       --color-alert-near: #f59e0b;   /* Ámbar aviso */
       --color-accent: #38bdf8;       /* Azul cian neutro */
-      --color-success: #10b981;      /* Verde API Sincronizada */
+      --color-success: #10b981;      /* Verde */
     }
 
     * { 
@@ -52,36 +52,36 @@
     .brand-dot { width: 10px; height: 10px; background-color: var(--color-accent); border-radius: 50%; box-shadow: 0 0 8px var(--color-accent); }
     
     .header-controls { display: flex; gap: 8px; align-items: center; }
-
-    /* Botón Único Estado API (Verde = Sincronizado, Rojo = Local) */
+    
+    /* Botón de estado API */
     .btn-api-status {
-      border: 1px solid transparent;
-      padding: 6px 12px;
+      border: 1px solid var(--border-color);
+      padding: 5px 10px;
       border-radius: 20px;
       cursor: pointer;
-      font-weight: 700;
-      font-size: 0.78rem;
-      transition: all 0.2s ease;
+      font-weight: 600;
+      font-size: 0.75rem;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
+      transition: all 0.2s ease;
     }
     .btn-api-status.sync {
       background: rgba(16, 185, 129, 0.15);
-      border-color: var(--color-success);
       color: var(--color-success);
+      border-color: rgba(16, 185, 129, 0.4);
     }
     .btn-api-status.local {
       background: rgba(239, 68, 68, 0.15);
-      border-color: var(--color-alert-active);
-      color: #fca5a5;
+      color: var(--color-alert-active);
+      border-color: rgba(239, 68, 68, 0.4);
     }
 
     .btn-help {
       background: var(--bg-card-hover);
       color: var(--text-main);
       border: 1px solid var(--border-color);
-      padding: 6px 12px;
+      padding: 5px 10px;
       border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
@@ -100,23 +100,19 @@
     .tab-content { display: none; width: 100%; }
     .tab-content.active { display: block; }
 
-    /* Diseño Móvil Vertical en 1 sola columna */
+    /* Layout Móvil Estricto 1 Columna */
     .assets-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 10px;
     }
 
-    /* Pantallas grandes / Escritorio */
     @media (min-width: 768px) {
-      .assets-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      .assets-grid { grid-template-columns: repeat(2, 1fr); }
     }
+
     @media (min-width: 1024px) {
-      .assets-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
+      .assets-grid { grid-template-columns: repeat(3, 1fr); }
     }
 
     .card {
@@ -140,7 +136,7 @@
       gap: 6px;
     }
 
-    /* Banner Resumen de Alertas */
+    /* Banner de Alertas compactas */
     .alerts-banner {
       background: rgba(239, 68, 68, 0.08);
       border: 1px solid rgba(239, 68, 68, 0.25);
@@ -248,21 +244,29 @@
       border-color: var(--color-accent);
     }
 
-    /* Contenedor del Gráfico Compacto (165px) */
+    /* Contenedor del Gráfico reducido */
     .chart-container { 
       position: relative; 
       width: 100%; 
-      height: 165px; 
+      height: 165px;
       background: var(--bg-main); 
       border-radius: 8px; 
       overflow: hidden; 
       margin-top: 6px; 
       border: 1px solid var(--border-color);
     }
-    canvas { 
-      width: 100% !important; 
-      height: 100% !important; 
-      display: block; 
+    canvas { width: 100%; height: 100%; display: block; }
+
+    .chart-legend-banner {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.6);
+      padding: 6px 10px;
+      border-radius: 6px;
+      margin-top: 6px;
+      border: 1px solid var(--border-color);
     }
 
     .form-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
@@ -278,13 +282,24 @@
       font-size: 0.82rem;
     }
 
+    /* Asignación Cartera */
+    .portfolio-alloc-bar {
+      height: 12px;
+      width: 100%;
+      background: #2a364f;
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      margin: 8px 0;
+    }
+    .alloc-rv { background: var(--color-accent); height: 100%; }
+    .alloc-rf { background: var(--color-success); height: 100%; }
+
     /* Tabla ISIN */
     .isin-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.78rem; }
     .isin-table th, .isin-table td { text-align: left; padding: 8px; border-bottom: 1px solid var(--border-color); }
     .isin-table th { color: var(--text-muted); font-size: 0.7rem; font-weight: 600; }
     .isin-code { font-family: monospace; color: var(--color-accent); font-size: 0.75rem; }
-    .isin-row { cursor: pointer; }
-    .isin-row:hover { background-color: var(--bg-card-hover); }
 
     /* Bottom Navigation (4 pestañas) */
     .bottom-nav {
@@ -358,20 +373,20 @@
       <span>Radar & Monitor Cartera</span>
     </div>
     <div class="header-controls">
-      <!-- Indicador / Botón de Estado de API -->
-      <button id="apiStatusBtn" class="btn-api-status sync" onclick="fetchLivePrices()">
-        🟢 API Sincronizada
+      <button id="apiStatusBtn" class="btn-api-status local" onclick="toggleApiStatus()">
+        <span id="apiStatusIcon">🔴</span>
+        <span id="apiStatusText">API Local</span>
       </button>
-      <button class="btn-help" onclick="toggleHelpModal()">?</button>
+      <button class="btn-help" onclick="toggleHelpModal()">? Ayuda</button>
     </div>
   </header>
 
   <div class="container">
 
-    <!-- PESTAÑA 1: INICIO & RADAR -->
+    <!-- PANTALLA 1: INICIO & RESUMEN -->
     <section id="tab-dashboard" class="tab-content active">
       
-      <!-- Banner Resumen de Avisos -->
+      <!-- Banner Resumen de Avisos con Botón para Abrir Ventana -->
       <div class="alerts-banner" id="alertsBannerContainer">
         <div class="alerts-banner-info">
           <span>🔔</span>
@@ -380,21 +395,21 @@
         <button class="btn-view-alerts" onclick="openAlertsModal()">Ver avisos detallados</button>
       </div>
 
-      <!-- Resumen General de Activos (1 columna vertical en móvil) -->
+      <!-- Resumen General de Activos -->
       <div class="card">
         <div class="card-title">
-          <span>🌐 Radar de Activos Principales</span>
-          <span style="font-size: 0.7rem; color: var(--text-muted);">Toca para editar</span>
+          <span>🌐 Radar de Activos Cotizados</span>
+          <span style="font-size: 0.7rem; color: var(--text-muted);">Toca para seleccionar</span>
         </div>
         <div class="assets-grid" id="mainAssetsGrid">
-          <!-- Carga dinámica de 7 tarjetas -->
+          <!-- Carga dinámica -->
         </div>
       </div>
 
-      <!-- Panel de Edición Rápida -->
+      <!-- Panel de Edición de Valores -->
       <div class="card">
         <div class="card-title">
-          <span>⚙️ Ajuste Manual de Precios / ATH</span>
+          <span>⚙️ Modificar Cotizaciones / ATH</span>
         </div>
         <div class="form-row">
           <div class="form-group">
@@ -411,22 +426,22 @@
           </div>
           <div class="form-group">
             <label for="dash-ath-input">ATH (Máx. Histórico)</label>
-            <input type="number" id="dash-ath-input" step="any" oninput="updateAssetFromInput()">
+            <input type="number" id="dash-ath-input" oninput="updateAssetFromInput()">
           </div>
           <div class="form-group">
             <label for="dash-val-input">Valor Actual</label>
-            <input type="number" id="dash-val-input" step="any" oninput="updateAssetFromInput()">
+            <input type="number" id="dash-val-input" oninput="updateAssetFromInput()">
           </div>
         </div>
       </div>
 
     </section>
 
-    <!-- PESTAÑA 2: GRÁFICOS REDUCIDOS DE VELAS -->
+    <!-- PANTALLA 2: GRÁFICOS CON VALORES Y NÚMEROS REALES -->
     <section id="tab-charts" class="tab-content">
       <div class="card">
         <div class="card-title">
-          <span>🎯 Gráfico de Velas Japonesas</span>
+          <span>🎯 Gráficos con Escala Real de Precios</span>
           <span id="chart-status" class="status-badge status-normal">NORMAL</span>
         </div>
 
@@ -452,110 +467,105 @@
           <button class="tf-btn" onclick="setTimeframe('1Y', this)">1Y</button>
         </div>
 
-        <!-- Canvas menos alto (165px) -->
+        <!-- Canvas menos alto (165px) con Números Explícitos -->
         <div class="chart-container">
           <canvas id="candleChart"></canvas>
         </div>
+
+        <div class="chart-legend-banner">
+          <span id="chartLegendAth">ATH: -</span>
+          <span id="chartLegendCurrent">Actual: -</span>
+          <span id="chartLegendDd">Caída: -</span>
+        </div>
       </div>
     </section>
 
-    <!-- PESTAÑA 3: RACHAS DESDE ATH -->
+    <!-- PANTALLA 3: RACHAS Y DISPARADORES -->
     <section id="tab-streaks" class="tab-content">
       <div class="card">
         <div class="card-title">
-          <span>📈 Monitor de Rachas y Caídas desde ATH</span>
-          <span style="font-size:0.7rem; color:var(--text-muted);">Estrategia Buy-the-Dip</span>
-        </div>
-        <div id="streaksOverallGrid" class="assets-grid" style="margin-bottom: 16px;">
-          <!-- Carga dinámica de la racha actual de TODOS los activos -->
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">
-          <span>🎯 Disparadores de Compra por Activo</span>
+          <span>📈 Disparadores de Compra (Buy-the-Dip)</span>
         </div>
         <div id="triggers-list">
-          <!-- Carga de niveles -15%, -25%, -35% -->
+          <!-- Carga dinámica sincronizada -->
         </div>
       </div>
     </section>
 
-    <!-- PESTAÑA 4: CARTERA Y FONDOS ISIN -->
+    <!-- PANTALLA 4: CARTERA DELEGADA SIN GRÁFICOS GENÉRICOS -->
     <section id="tab-portfolio" class="tab-content">
+      
+      <!-- AXA Inversión PIAS -->
       <div class="card">
         <div class="card-title">
-          <span>AXA Inversión (PIAS / Fondos)</span>
+          <span>🏛️ AXA Inversión (PIAS)</span>
+          <span style="font-size:0.75rem; color:var(--color-accent); font-weight:700;">85% RV / 15% RF</span>
         </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>% Renta Variable</label>
-            <input type="text" value="85%" readonly>
-          </div>
-          <div class="form-group">
-            <label>% Renta Fija</label>
-            <input type="text" value="15%" readonly>
-          </div>
-        </div>
-
-        <div style="margin-top: 10px; margin-bottom: 10px;">
-          <label style="font-size: 0.72rem; color: var(--text-muted); display:block; margin-bottom: 4px;">Analizar Gráfico por ISIN:</label>
-          <select id="isin-select" onchange="updateIsinChart()" style="width:100%; background:var(--bg-main); border:1px solid var(--border-color); color:var(--text-main); padding:8px; border-radius:6px; font-size:0.82rem;">
-            <option value="FR0000447823">FR0000447823 - AXA TRESOR COURT TERME EUR ACC</option>
-            <option value="LU0528102642">LU0528102642 - AB SICAV I - EUROZONE GROWTH "A"</option>
-            <option value="LU0115769746">LU0115769746 - FIDELITY WORLD E EUR</option>
-            <option value="LU0868490383">LU0868490383 - AXA WF GLOBAL SMALL CAP EQUITY QI "A"</option>
-            <option value="LU3311927597">LU3311927597 - BNP PARIBAS GLOBAL MEGATRENDS "N2"</option>
-            <option value="LU0823422141">LU0823422141 - BNP PARIBAS DISRUPTIVE TECH N EUR</option>
-            <option value="LU0861579265">LU0861579265 - AB LOW VOLATILITY EQUITY PORTFOLIO A</option>
-            <option value="LU0232575059">LU0232575059 - AB SICAV I - AMERICAN GROWTH "C"</option>
-          </select>
+        <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:8px;">
+          Estrategia global orientada al crecimiento con protección de capital relativa en renta fija a corto plazo.
+        </p>
+        
+        <div class="portfolio-alloc-bar">
+          <div class="alloc-rv" style="width: 85%;" title="Renta Variable (85%)"></div>
+          <div class="alloc-rf" style="width: 15%;" title="Renta Fija (15%)"></div>
         </div>
 
-        <div class="chart-container">
-          <canvas id="isinChart"></canvas>
+        <div class="form-row" style="margin-top:10px;">
+          <div class="form-group"><label>Renta Variable</label><input type="text" value="85%" readonly></div>
+          <div class="form-group"><label>Renta Fija / Monetario</label><input type="text" value="15%" readonly></div>
         </div>
 
-        <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display:block; margin-top:14px; margin-bottom: 6px;">Fondos ISIN Registrados:</span>
+        <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display:block; margin-top:10px; margin-bottom: 6px;">Fondos ISIN Integrados:</span>
         <table class="isin-table">
           <thead>
             <tr>
-              <th>Fondo</th>
-              <th>Código ISIN</th>
+              <th>Fondo de Inversión</th>
+              <th>ISIN</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="isin-row" onclick="selectIsin('FR0000447823')"><td>AXA TRESOR COURT TERME EUR ACC</td><td class="isin-code">FR0000447823</td></tr>
-            <tr class="isin-row" onclick="selectIsin('LU0528102642')"><td>AB SICAV I - EUROZONE GROWTH "A"</td><td class="isin-code">LU0528102642</td></tr>
-            <tr class="isin-row" onclick="selectIsin('LU0115769746')"><td>FIDELITY WORLD E EUR</td><td class="isin-code">LU0115769746</td></tr>
-            <tr class="isin-row" onclick="selectIsin('LU0868490383')"><td>AXA WF GLOBAL SMALL CAP EQUITY QI "A"</td><td class="isin-code">LU0868490383</td></tr>
-            <tr class="isin-row" onclick="selectIsin('LU3311927597')"><td>BNP PARIBAS GLOBAL MEGATRENDS "N2"</td><td class="isin-code">LU3311927597</td></tr>
-            <tr class="isin-row" onclick="selectIsin('LU0823422141')"><td>BNP PARIBAS DISRUPTIVE TECH N EUR</td><td class="isin-code">LU0823422141</td></tr>
-            <tr class="isin-row" onclick="selectIsin('LU0861579265')"><td>AB LOW VOLATILITY EQUITY A USD</td><td class="isin-code">LU0861579265</td></tr>
-            <tr class="isin-row" onclick="selectIsin('LU0232575059')"><td>AB SICAV I - AMERICAN GROWTH C EUR</td><td class="isin-code">LU0232575059</td></tr>
+            <tr><td>AXA TRESOR COURT TERME EUR ACC</td><td class="isin-code">FR0000447823</td></tr>
+            <tr><td>AB SICAV I - EUROZONE GROWTH "A"</td><td class="isin-code">LU0528102642</td></tr>
+            <tr><td>FIDELITY WORLD E EUR</td><td class="isin-code">LU0115769746</td></tr>
+            <tr><td>AXA WF GLOBAL SMALL CAP EQUITY QI "A"</td><td class="isin-code">LU0868490383</td></tr>
+            <tr><td>BNP PARIBAS GLOBAL MEGATRENDS "N2"</td><td class="isin-code">LU3311927597</td></tr>
+            <tr><td>BNP PARIBAS DISRUPTIVE TECH N EUR</td><td class="isin-code">LU0823422141</td></tr>
+            <tr><td>AB LOW VOLATILITY EQUITY A USD</td><td class="isin-code">LU0861579265</td></tr>
+            <tr><td>AB SICAV I - AMERICAN GROWTH C EUR</td><td class="isin-code">LU0232575059</td></tr>
           </tbody>
         </table>
       </div>
 
+      <!-- AXA Estrategia General -->
       <div class="card">
         <div class="card-title">
-          <span>AXA Estrategia General</span>
+          <span>💼 AXA Estrategia General</span>
+          <span style="font-size:0.75rem; color:var(--color-accent); font-weight:700;">70% RV / 30% RF</span>
         </div>
-        <div class="form-row">
-          <div class="form-group"><label>% RV</label><input type="text" value="70%" readonly></div>
-          <div class="form-group"><label>% RF</label><input type="text" value="30%" readonly></div>
+        <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:8px;">
+          Perfil equilibrado para amortiguar ciclos de volatilidad mediante acumulación periódica.
+        </p>
+        <div class="portfolio-alloc-bar">
+          <div class="alloc-rv" style="width: 70%;"></div>
+          <div class="alloc-rf" style="width: 30%;"></div>
         </div>
       </div>
 
+      <!-- Intesa Sanpaolo -->
       <div class="card">
         <div class="card-title">
-          <span>Gestión Intesa Sanpaolo</span>
+          <span>🏦 Gestión Intesa Sanpaolo</span>
+          <span style="font-size:0.75rem; color:var(--color-accent); font-weight:700;">60% RV / 40% RF</span>
         </div>
-        <div class="form-row">
-          <div class="form-group"><label>% RV</label><input type="text" value="60%" readonly></div>
-          <div class="form-group"><label>% RF</label><input type="text" value="40%" readonly></div>
+        <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:8px;">
+          Gestión de conservación activa con mayor peso en renta fija corporativa y de gobiernos.
+        </p>
+        <div class="portfolio-alloc-bar">
+          <div class="alloc-rv" style="width: 60%;"></div>
+          <div class="alloc-rf" style="width: 40%;"></div>
         </div>
       </div>
+
     </section>
 
   </div>
@@ -598,11 +608,11 @@
       </div>
       <div class="help-section">
         <h4>1. Pestañas Principales</h4>
-        <p>• <b>Inicio:</b> Radar general y edición de precios.<br>• <b>Gráficos:</b> Visualización instantánea de velas.<br>• <b>Rachas:</b> Estado de caídas desde ATH y disparadores.<br>• <b>Cartera:</b> Distribución de activos y fondos ISIN.</p>
+        <p>• <b>Inicio:</b> Radar de activos cotizados y alertas resumidas.<br>• <b>Gráficos:</b> Velas con valores numéricos y niveles exactos.<br>• <b>Rachas:</b> Disparadores de compra sincronizados.<br>• <b>Cartera:</b> Distribución real de fondos AXA e Intesa.</p>
       </div>
       <div class="help-section">
-        <h4>2. Estado de API</h4>
-        <p>• <b>🟢 API Sincronizada:</b> Precios en vivo cargados.<br>• <b>🔴 API Local:</b> Funcionando con datos de reserva almacenados.</p>
+        <h4>2. Botón API Sincronizada</h4>
+        <p>Permite alternar entre la simulación local de prueba y la sincronización con las APIs financieras de red.</p>
       </div>
     </div>
   </div>
@@ -610,54 +620,69 @@
   <script>
     // Estado Global de Activos
     const ASSETS_DATA = {
-      BTC: { name: 'Bitcoin (BTC)', ath: 100000, val: 84000, levels: [15, 25, 35], seed: 101 },
-      XAU: { name: 'Oro (XAU)', ath: 2750, val: 2610, levels: [5, 10, 15], seed: 202 },
-      XAG: { name: 'Plata (XAG)', ath: 35, val: 31.5, levels: [10, 18, 25], seed: 303 },
-      SP500: { name: 'S&P 500', ath: 5800, val: 5450, levels: [8, 12, 18], seed: 404 },
-      IBEX35: { name: 'IBEX 35', ath: 12000, val: 11600, levels: [5, 10, 15], seed: 505 },
-      EMM: { name: 'MSCI Emerging (EMM)', ath: 1150, val: 1020, levels: [8, 14, 20], seed: 606 },
-      SP600: { name: 'S&P SmallCap 600', ath: 1420, val: 1280, levels: [8, 14, 20], seed: 707 }
+      BTC: { name: 'Bitcoin (BTC)', ath: 100000, val: 84000, levels: [15, 25, 35], seed: 101, unit: '$' },
+      XAU: { name: 'Oro (XAU)', ath: 2750, val: 2610, levels: [5, 10, 15], seed: 202, unit: '$' },
+      XAG: { name: 'Plata (XAG)', ath: 35, val: 31.5, levels: [10, 18, 25], seed: 303, unit: '$' },
+      SP500: { name: 'S&P 500', ath: 5800, val: 5450, levels: [8, 12, 18], seed: 404, unit: 'pts' },
+      IBEX35: { name: 'IBEX 35', ath: 12000, val: 11600, levels: [5, 10, 15], seed: 505, unit: 'pts' },
+      EMM: { name: 'MSCI Emerging', ath: 1150, val: 1020, levels: [8, 14, 20], seed: 606, unit: 'pts' },
+      SP600: { name: 'S&P SmallCap 600', ath: 1420, val: 1280, levels: [8, 14, 20], seed: 707, unit: 'pts' }
     };
 
     let selectedTimeframe = '1W';
     let activeChartAsset = 'BTC';
+    let isApiSynced = false;
 
-    // 1. Conexión / Consulta API Live con Botón de Estado Verde/Rojo
-    async function fetchLivePrices() {
-      const btn = document.getElementById('apiStatusBtn');
-      btn.innerHTML = '⏳ Conectando...';
+    // LÓGICA DE ALERTA UNIFICADA
+    function calculateStatus(item) {
+      const drawdown = ((item.ath - item.val) / item.ath) * 100;
+      let highestTriggered = null;
+      let nearestLevel = null;
+      let minDiff = 999;
 
-      try {
-        // Consulta API de cripto/mercado en tiempo real (Coinbase API)
-        const res = await fetch('https://api.coinbase.com/v2/prices/BTC-USD/spot');
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        const json = await res.json();
-        
-        if (json && json.data && json.data.amount) {
-          const btcPrice = parseFloat(json.data.amount);
-          ASSETS_DATA.BTC.val = Math.round(btcPrice);
-          
-          btn.className = 'btn-api-status sync';
-          btn.innerHTML = '🟢 API Sincronizada';
-        } else {
-          throw new Error("Datos no válidos");
+      item.levels.forEach(lvl => {
+        const diff = lvl - drawdown;
+        if (drawdown >= lvl) {
+          if (!highestTriggered || lvl > highestTriggered) {
+            highestTriggered = lvl;
+          }
+        } else if (diff <= 3 && diff > 0) {
+          if (diff < minDiff) {
+            minDiff = diff;
+            nearestLevel = lvl;
+          }
         }
-      } catch (e) {
-        console.warn("Utilizando cotizaciones de reserva (API Local):", e);
-        btn.className = 'btn-api-status local';
-        btn.innerHTML = '🔴 API Local';
-      }
+      });
 
-      // Actualizar toda la interfaz con los datos procesados
-      renderMainDashboard();
-      onDashAssetChange();
-      updateStreaksTab();
-      if (document.getElementById('tab-charts').classList.contains('active')) {
-        updateChart();
+      return {
+        drawdown: drawdown,
+        isTriggered: highestTriggered !== null,
+        triggeredLevel: highestTriggered,
+        isNear: nearestLevel !== null,
+        nearLevel: nearestLevel,
+        nearDiff: minDiff
+      };
+    }
+
+    // Toggle Botón API
+    function toggleApiStatus() {
+      isApiSynced = !isApiSynced;
+      const btn = document.getElementById('apiStatusBtn');
+      const icon = document.getElementById('apiStatusIcon');
+      const text = document.getElementById('apiStatusText');
+
+      if (isApiSynced) {
+        btn.className = 'btn-api-status sync';
+        icon.innerText = '🟢';
+        text.innerText = 'API Sincronizada';
+      } else {
+        btn.className = 'btn-api-status local';
+        icon.innerText = '🔴';
+        text.innerText = 'API Local';
       }
     }
 
-    // 2. Cambio de Pestañas con Redibujado Automático
+    // Navegación
     function switchTab(tabId, btn) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -666,13 +691,9 @@
       if (btn) btn.classList.add('active');
 
       if (tabId === 'charts') {
-        // Ejecución inmediata + breve diferido para asegurar dimensiones del Canvas
-        updateChart();
-        setTimeout(updateChart, 60);
+        setTimeout(updateChart, 50);
       } else if (tabId === 'streaks') {
-        updateStreaksTab();
-      } else if (tabId === 'portfolio') {
-        setTimeout(updateIsinChart, 60);
+        updateTriggersList();
       }
     }
 
@@ -692,11 +713,10 @@
       selectedTimeframe = tf;
       document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
       if (btnElement) btnElement.classList.add('active');
-      
       updateChart();
     }
 
-    // 3. Renderizado del Dashboard e Inspector de Alertas
+    // Renderizado del Dashboard y Alertas Unificadas
     function renderMainDashboard() {
       const grid = document.getElementById('mainAssetsGrid');
       const bannerSummary = document.getElementById('bannerSummaryText');
@@ -710,56 +730,57 @@
 
       Object.keys(ASSETS_DATA).forEach(key => {
         const item = ASSETS_DATA[key];
-        const drawdown = ((item.ath - item.val) / item.ath) * 100;
+        const status = calculateStatus(item);
         
         let ddClass = 'drawdown-good';
-        if (drawdown >= 15) ddClass = 'drawdown-alert';
-        else if (drawdown >= 8) ddClass = 'drawdown-warn';
+        if (status.isTriggered) ddClass = 'drawdown-alert';
+        else if (status.isNear) ddClass = 'drawdown-warn';
 
-        // Cuadrícula en 1 columna vertical para móvil
+        // Tarjeta
         const cardHTML = `
           <div class="asset-card" onclick="selectAssetForEdit('${key}')">
             <div class="asset-header">
               <span class="asset-name">${item.name}</span>
-              <span class="asset-drawdown ${ddClass}">-${drawdown.toFixed(1)}%</span>
+              <span class="asset-drawdown ${ddClass}">-${status.drawdown.toFixed(1)}%</span>
             </div>
             <div class="asset-values">
-              <span>ATH: ${item.ath.toLocaleString()}</span>
-              <span>Actual: ${item.val.toLocaleString()}</span>
+              <span>ATH: ${item.ath.toLocaleString()} ${item.unit}</span>
+              <span>Actual: ${item.val.toLocaleString()} ${item.unit}</span>
             </div>
           </div>
         `;
         grid.innerHTML += cardHTML;
 
-        // Evaluación de niveles de disparo
-        item.levels.forEach(lvl => {
-          const targetPrice = item.ath * (1 - lvl / 100);
-          const diffPct = lvl - drawdown;
-
-          if (drawdown >= lvl) {
-            triggeredCount++;
-            modalList.innerHTML += `
-              <div class="alert-detail-card triggered">
-                <div>
-                  <strong>🚨 ${item.name}</strong><br>
-                  <span style="font-size:0.75rem; color:var(--text-muted);">Caída actual (-${drawdown.toFixed(1)}%) superó el nivel -${lvl}% (Objetivo: ${targetPrice.toLocaleString()})</span>
-                </div>
-                <span class="status-badge status-active">ACTIVADA</span>
+        // Modal de Alertas
+        if (status.isTriggered) {
+          triggeredCount++;
+          const targetPrice = item.ath * (1 - status.triggeredLevel / 100);
+          modalList.innerHTML += `
+            <div class="alert-detail-card triggered">
+              <div>
+                <strong>🚨 ${item.name}</strong><br>
+                <span style="font-size:0.75rem; color:var(--text-muted);">
+                  Caída -${status.drawdown.toFixed(1)}% superó el nivel -${status.triggeredLevel}% (Target: ${targetPrice.toLocaleString()} ${item.unit})
+                </span>
               </div>
-            `;
-          } else if (diffPct <= 3 && diffPct > 0) {
-            nearCount++;
-            modalList.innerHTML += `
-              <div class="alert-detail-card near">
-                <div>
-                  <strong>⚠️ ${item.name}</strong><br>
-                  <span style="font-size:0.75rem; color:var(--text-muted);">Faltan solo -${diffPct.toFixed(1)}% para el nivel -${lvl}% (Objetivo: ${targetPrice.toLocaleString()})</span>
-                </div>
-                <span class="status-badge status-near">CERCA</span>
+              <span class="status-badge status-active">ACTIVADA</span>
+            </div>
+          `;
+        } else if (status.isNear) {
+          nearCount++;
+          const targetPrice = item.ath * (1 - status.nearLevel / 100);
+          modalList.innerHTML += `
+            <div class="alert-detail-card near">
+              <div>
+                <strong>⚠️️ ${item.name}</strong><br>
+                <span style="font-size:0.75rem; color:var(--text-muted);">
+                  A -${status.nearDiff.toFixed(1)}% del nivel -${status.nearLevel}% (Target: ${targetPrice.toLocaleString()} ${item.unit})
+                </span>
               </div>
-            `;
-          }
-        });
+              <span class="status-badge status-near">CERCA</span>
+            </div>
+          `;
+        }
       });
 
       if (triggeredCount > 0 || nearCount > 0) {
@@ -768,7 +789,7 @@
         bannerSummary.innerHTML = `Mercado estable. Sin alertas de compra activas.`;
         modalList.innerHTML = `
           <div style="text-align:center; padding: 20px; color: var(--text-muted); font-size:0.85rem;">
-            ✅ Todos los activos cotizan dentro de márgenes normales.
+            ✅ Todos los activos cotizan en niveles normales.
           </div>
         `;
       }
@@ -802,71 +823,82 @@
       if (key === activeChartAsset) {
         updateChart();
       }
-      updateStreaksTab();
+      updateTriggersList();
     }
 
     function onChartAssetChange() {
       activeChartAsset = document.getElementById('chart-asset-select').value;
       updateChart();
-      updateStreaksTab();
+      updateTriggersList();
     }
 
-    // 4. MOTOR DE DIBUJO DE CANVAS DE VELAS ROBUSTO Y REPARADO
-    function drawCandlestickChart(simPrice, athPrice, seedKey) {
+    // Gráfico Canvas con Eje Numérico Explícito
+    function drawCandlestickChart(item) {
       const canvas = document.getElementById('candleChart');
       if (!canvas) return;
-
-      const rect = canvas.getBoundingClientRect();
-      const width = rect.width || canvas.parentElement.clientWidth || 300;
-      const height = rect.height || 165;
-
-      // Ajustar resolución interna del canvas
-      canvas.width = width;
-      canvas.height = height;
-
       const ctx = canvas.getContext('2d');
+      
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      
+      const width = canvas.width;
+      const height = canvas.height;
+      const rightPadding = 65; // Margen para los números de precios
+      
       ctx.clearRect(0, 0, width, height);
 
-      let candleCount = 16;
-      if (selectedTimeframe === '1D') candleCount = 24;
-      if (selectedTimeframe === '1M') candleCount = 12;
-      if (selectedTimeframe === '1Y') candleCount = 8;
-
-      const candleWidth = (width - 30) / candleCount;
-      const minY = Math.min(simPrice, athPrice * 0.65);
-      const maxY = athPrice * 1.05;
-      const getY = (val) => height - 15 - ((val - minY) / (maxY - minY)) * (height - 30);
-
-      // Línea de referencia ATH
-      ctx.strokeStyle = 'rgba(148, 163, 184, 0.35)';
-      ctx.setLineDash([4, 4]);
-      ctx.beginPath();
-      ctx.moveTo(0, getY(athPrice));
-      ctx.lineTo(width, getY(athPrice));
-      ctx.stroke();
-      ctx.setLineDash([]);
+      const candleCount = 14;
+      const candleAreaWidth = width - rightPadding - 20;
+      const candleWidth = candleAreaWidth / candleCount;
       
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '10px sans-serif';
-      ctx.fillText('ATH: ' + athPrice.toLocaleString(), 6, getY(athPrice) - 3);
+      const minY = Math.min(item.val * 0.95, item.ath * 0.60);
+      const maxY = item.ath * 1.05;
+      
+      const getY = (val) => height - 18 - ((val - minY) / (maxY - minY)) * (height - 30);
 
-      // Dibujar velas limpias
+      // Dibujar Líneas de Guía Horizontales Numéricas
+      const priceSteps = [item.ath, (item.ath + item.val) / 2, item.val, minY];
+      ctx.font = '9px monospace';
+      
+      priceSteps.forEach(pVal => {
+        const y = getY(pVal);
+        ctx.strokeStyle = 'rgba(148, 163, 184, 0.15)';
+        ctx.setLineDash([2, 4]);
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width - rightPadding, y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Eje de Precios numérico a la derecha
+        ctx.fillStyle = pVal === item.ath ? '#38bdf8' : (pVal === item.val ? '#10b981' : '#94a3b8');
+        ctx.fillText(pVal.toLocaleString(undefined, {maximumFractionDigits: 1}), width - rightPadding + 5, y + 3);
+      });
+
+      // Línea Destacada ATH
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+      ctx.beginPath();
+      ctx.moveTo(0, getY(item.ath));
+      ctx.lineTo(width - rightPadding, getY(item.ath));
+      ctx.stroke();
+
+      // Generar y dibujar Velas
       for(let i = 0; i < candleCount; i++) {
-        const x = 15 + i * candleWidth + candleWidth/2;
+        const x = 10 + i * candleWidth + candleWidth / 2;
         const isLast = (i === candleCount - 1);
         
         let close;
         if (isLast) {
-          close = simPrice;
+          close = item.val;
         } else {
           const ratio = (i + 1) / candleCount;
-          const noise = Math.sin((i + seedKey) * 1.7) * 0.035;
-          close = athPrice * (1 - (1 - (simPrice / athPrice)) * ratio + noise);
+          const noise = Math.sin((i + item.seed) * 1.5) * 0.03;
+          close = item.ath * (1 - (1 - (item.val / item.ath)) * ratio + noise);
         }
         
-        const open = isLast ? close * 1.008 : close * (1 + (Math.cos(i + seedKey) * 0.02));
-        const high = Math.max(open, close) * 1.006;
-        const low = Math.min(open, close) * 0.994;
+        const open = isLast ? close * 1.008 : close * (1 + (Math.cos(i + item.seed) * 0.02));
+        const high = Math.max(open, close) * 1.005;
+        const low = Math.min(open, close) * 0.995;
 
         const isGreen = close >= open;
         const color = isGreen ? '#38bdf8' : '#f59e0b';
@@ -882,171 +914,86 @@
         // Cuerpo
         const bodyTop = getY(Math.max(open, close));
         const bodyBottom = getY(Math.min(open, close));
-        const bodyHeight = Math.max(2, bodyBottom - bodyTop);
-        ctx.fillRect(x - candleWidth/3, bodyTop, (candleWidth/3) * 2, bodyHeight);
+        ctx.fillRect(x - candleWidth/3, bodyTop, (candleWidth/3) * 2, Math.max(2, bodyBottom - bodyTop));
       }
     }
 
     function updateChart() {
       document.getElementById('chart-asset-select').value = activeChartAsset;
-      const data = ASSETS_DATA[activeChartAsset];
-      if (!data) return;
+      const item = ASSETS_DATA[activeChartAsset];
+      if (!item) return;
 
-      drawCandlestickChart(data.val, data.ath, data.seed);
+      drawCandlestickChart(item);
 
-      const dropPct = ((data.ath - data.val) / data.ath) * 100;
+      const status = calculateStatus(item);
       let globalStatusClass = 'status-normal';
       let globalStatusText = 'NORMAL';
 
-      if (dropPct >= 15) {
+      if (status.isTriggered) {
         globalStatusClass = 'status-active';
-        globalStatusText = 'OPORTUNIDAD DE COMPRA';
-      } else if (dropPct >= 8) {
+        globalStatusText = '🚨 ALERTA COMPRA';
+      } else if (status.isNear) {
         globalStatusClass = 'status-near';
-        globalStatusText = 'EN SEGUIMIENTO';
+        globalStatusText = '⚠️️ CERCA DE NIVEL';
       }
 
       const globalBadge = document.getElementById('chart-status');
       globalBadge.className = 'status-badge ' + globalStatusClass;
       globalBadge.innerText = globalStatusText;
+
+      // Actualizar Leyenda Numérica
+      document.getElementById('chartLegendAth').innerText = `ATH: ${item.ath.toLocaleString()} ${item.unit}`;
+      document.getElementById('chartLegendCurrent').innerText = `Actual: ${item.val.toLocaleString()} ${item.unit}`;
+      document.getElementById('chartLegendDd').innerText = `Caída: -${status.drawdown.toFixed(1)}%`;
     }
 
-    // 5. RESTAURACIÓN DE LA PESTAÑA DE RACHAS DESDE ATH
-    function updateStreaksTab() {
-      const overallGrid = document.getElementById('streaksOverallGrid');
-      overallGrid.innerHTML = '';
-
-      // Mostrar caídas de TODOS los activos
-      Object.keys(ASSETS_DATA).forEach(key => {
-        const item = ASSETS_DATA[key];
-        const drawdown = ((item.ath - item.val) / item.ath) * 100;
-        
-        let ddClass = 'drawdown-good';
-        if (drawdown >= 15) ddClass = 'drawdown-alert';
-        else if (drawdown >= 8) ddClass = 'drawdown-warn';
-
-        overallGrid.innerHTML += `
-          <div class="asset-card" onclick="selectStreakAsset('${key}')">
-            <div class="asset-header">
-              <span class="asset-name">${item.name}</span>
-              <span class="asset-drawdown ${ddClass}">-${drawdown.toFixed(1)}%</span>
-            </div>
-            <div class="asset-values">
-              <span>Máximo: ${item.ath.toLocaleString()}</span>
-              <span>Actual: ${item.val.toLocaleString()}</span>
-            </div>
-          </div>
-        `;
-      });
-
-      // Detalle de niveles del activo seleccionado
-      const data = ASSETS_DATA[activeChartAsset];
-      if (!data) return;
-
-      const dropPct = ((data.ath - data.val) / data.ath) * 100;
+    // Pestaña Rachas y Disparadores Totalmente Sincronizada
+    function updateTriggersList() {
       const listContainer = document.getElementById('triggers-list');
       listContainer.innerHTML = '';
 
-      data.levels.forEach(lvlPct => {
-        const targetPrice = data.ath * (1 - lvlPct / 100);
-        const currentDiffPct = lvlPct - dropPct;
-        let statusClass = 'status-normal';
-        let statusLabel = 'EN ESPERA';
+      Object.keys(ASSETS_DATA).forEach(key => {
+        const item = ASSETS_DATA[key];
+        const status = calculateStatus(item);
 
-        if (dropPct >= lvlPct) {
-          statusClass = 'status-active';
-          statusLabel = '¡ACTIVADO!';
-        } else if (currentDiffPct <= 3) {
-          statusClass = 'status-near';
-          statusLabel = `CERCA (-${currentDiffPct.toFixed(1)}%)`;
-        }
+        item.levels.forEach(lvlPct => {
+          const targetPrice = item.ath * (1 - lvlPct / 100);
+          const currentDiffPct = lvlPct - status.drawdown;
+          
+          let statusClass = 'status-normal';
+          let statusLabel = 'EN ESPERA';
 
-        const itemHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:center; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
-            <div>
-              <div style="font-weight:600; font-size:0.85rem;">${data.name} - Disparo Caída -${lvlPct}%</div>
-              <div style="font-size:0.72rem; color:var(--text-muted);">Precio Objetivo: ${targetPrice.toLocaleString(undefined, {maximumFractionDigits:2})}</div>
+          if (status.drawdown >= lvlPct) {
+            statusClass = 'status-active';
+            statusLabel = '🚨 ALERTA COMPRA';
+          } else if (currentDiffPct <= 3 && currentDiffPct > 0) {
+            statusClass = 'status-near';
+            statusLabel = `⚠️ CERCA (-${currentDiffPct.toFixed(1)}%)`;
+          }
+
+          const itemHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+              <div>
+                <div style="font-weight:600; font-size:0.85rem;">${item.name} - Umbral -${lvlPct}%</div>
+                <div style="font-size:0.72rem; color:var(--text-muted);">Objetivo: ${targetPrice.toLocaleString(undefined, {maximumFractionDigits:1})} ${item.unit} | Actual: -${status.drawdown.toFixed(1)}%</div>
+              </div>
+              <span class="status-badge ${statusClass}">${statusLabel}</span>
             </div>
-            <span class="status-badge ${statusClass}">${statusLabel}</span>
-          </div>
-        `;
-        listContainer.innerHTML += itemHTML;
+          `;
+          listContainer.innerHTML += itemHTML;
+        });
       });
     }
 
-    function selectStreakAsset(key) {
-      activeChartAsset = key;
-      updateStreaksTab();
-    }
-
-    // 6. Gráfico de Fondos ISIN
-    function updateIsinChart() {
-      const isinCode = document.getElementById('isin-select').value;
-      const canvas = document.getElementById('isinChart');
-      if (!canvas) return;
-      
-      const rect = canvas.getBoundingClientRect();
-      const width = rect.width || canvas.parentElement.clientWidth || 300;
-      const height = rect.height || 165;
-      
-      canvas.width = width;
-      canvas.height = height;
-      
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, width, height);
-
-      let seed = 0;
-      for (let i = 0; i < isinCode.length; i++) seed += isinCode.charCodeAt(i);
-
-      const candleCount = 16;
-      const candleWidth = (width - 30) / candleCount;
-      const basePrice = 100 + (seed % 50);
-
-      for(let i = 0; i < candleCount; i++) {
-        const x = 15 + i * candleWidth + candleWidth/2;
-        const trend = Math.sin((i + seed) * 0.7) * 8;
-        const close = basePrice + trend;
-        const open = close * (1 + (Math.cos(i + seed) * 0.012));
-        const high = Math.max(open, close) * 1.006;
-        const low = Math.min(open, close) * 0.994;
-
-        const getY = (val) => height - 15 - ((val - (basePrice - 15)) / 30) * (height - 30);
-
-        const isGreen = close >= open;
-        const color = isGreen ? '#38bdf8' : '#f59e0b';
-        ctx.strokeStyle = color;
-        ctx.fillStyle = color;
-
-        ctx.beginPath();
-        ctx.moveTo(x, getY(high));
-        ctx.lineTo(x, getY(low));
-        ctx.stroke();
-
-        const bodyTop = getY(Math.max(open, close));
-        const bodyBottom = getY(Math.min(open, close));
-        ctx.fillRect(x - candleWidth/3, bodyTop, (candleWidth/3) * 2, Math.max(2, bodyBottom - bodyTop));
-      }
-    }
-
-    function selectIsin(isinCode) {
-      document.getElementById('isin-select').value = isinCode;
-      updateIsinChart();
-    }
-
-    // Inicialización al cargar la página
     window.onload = () => {
       renderMainDashboard();
       onDashAssetChange();
-      fetchLivePrices(); // Intenta sync API de inmediato
+      updateChart();
+      updateTriggersList();
     };
 
     window.onresize = () => {
-      if (document.getElementById('tab-charts').classList.contains('active')) {
-        updateChart();
-      }
-      if (document.getElementById('tab-portfolio').classList.contains('active')) {
-        updateIsinChart();
-      }
+      updateChart();
     };
   </script>
 </body>
